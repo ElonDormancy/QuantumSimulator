@@ -217,14 +217,16 @@ function addrow() {
     }, 0);
 }
 
-function FindCtrl(x, draggables) {
+function FindCtrl(x) {
+    var area = document.querySelector("#DrawArea")
+    var draggables = area.querySelectorAll(".draggable")
     for (var i = 0; i < draggables.length; i++) {
-        var dragging = draggables[i];
-        var pcol = dragging.parentNode;
+        var sdrag = draggables[i];
+        var pcol = sdrag.parentNode;
         var tmpx = pcol.getAttribute("data-cols");
-        var gatectrl = dragging.getAttribute("data-control")
-        if (x == tmpx || gatectrl == "true") {
-            dragging.remove()
+        var gatectrl = sdrag.getAttribute("data-control")
+        if (x == tmpx && gatectrl == "true") {
+            sdrag.remove()
         }
     }
 }
@@ -249,8 +251,9 @@ function DeleteSingleCtrl() {
         }
     }
     for (var i of tmp) {
-        if (CountArray(tmp, i) < 2)
-            FindCtrl(x, draggables)
+        if (CountArray(tmp, i) < 2) {
+            FindCtrl(i)
+        }
     }
 
 }
@@ -266,10 +269,12 @@ function deleterow() {
     qubits.pop()
     qvizdraw["qubits"] = qubits//CHANGE THE GLOBAL VARS
     setTimeout(() => {
-        Init_algorithm()
-        DeleteSingleCtrl()
-        totoaldrawqc(totoalqcinfor())
         compile()
+        Init_algorithm()
+        totoaldrawqc(totoalqcinfor())
+        setTimeout(() => {
+            DeleteSingleCtrl()
+        }, 0);
     }, 0);
 }
 
@@ -285,9 +290,10 @@ function deletecol() {
         temp[len - 1].remove()
     }
     setTimeout(() => {
-        Init_algorithm()
+        DeleteSingleCtrl()
         totoaldrawqc(totoalqcinfor())
         compile()
+        Init_algorithm()
     }, 0);
 }
 //CLICK TO REVERSE THE QUBIT
@@ -485,8 +491,7 @@ function dragDrop(e) {
         draggableL(draggablesvar)
         totoaldrawqc(totoalqcinfor())
         UpdateData()
-        var selectbox = document.querySelector("#example")
-        selectbox.options[0].selected = true;
+        Init_algorithm()
     }, 0);
 
 }

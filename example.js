@@ -55,8 +55,11 @@ function GHZ(rows, cols) {
     if (rows > 3) {
         n = rows
     }
-    if (cols > 3) {
+    if (cols > rows) {
         m = cols
+    }
+    else {
+        m = rows
     }
     Initialize(n, m)
     var gate = new GateSet()
@@ -111,7 +114,6 @@ function MosaicGate(rows, cols, algorithm) {
     setTimeout(() => {
         var dragarea = document.querySelector("#DrawArea")
         var cells = dragarea.querySelectorAll(".row")
-        console.log(GateM)
         for (var cell of cells) {
             var Areacols = cell.getAttribute("data-cols")
             var tmp = cell.parentNode
