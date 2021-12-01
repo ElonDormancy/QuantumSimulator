@@ -34,8 +34,9 @@ function DensityMatrix(ret) {
     for (var i = 0; i < len; i++) {
         var rows = []
         for (var j = 0; j < len; j++) {
-            rows[j] = math.abs((ret[i] * ret[j]).toFixed(3))
+            rows[j] = NumtoA((math.multiply(ret[i], ret[j]))).toFixed(3)
         }
+
         qubit.push(i2b(i, n))
         M[i] = rows
     }
@@ -43,7 +44,15 @@ function DensityMatrix(ret) {
     object["values"] = M
     return object
 }
-
+function NumtoA(num) {
+    if (typeof (num) == "number") {
+        var am = math.pow(num, 2)
+    }
+    else {
+        var am = math.pow(num.re, 2) + math.pow(num.im, 2)
+    }
+    return am
+}
 
 function GetFrequency(ret) {
     var normalized = []
@@ -57,14 +66,7 @@ function GetFrequency(ret) {
         var q = i2b(i, n)
         object["qubit"] = q
         var a = ret[i]
-        if (typeof (a) == "number") {
-            var am = math.pow(a, 2)
-        }
-        else {
-            var am = math.pow(a.re, 2) + math.pow(a.im, 2)
-        }
-
-        object["frequency"] = am
+        object["frequency"] = NumtoA(a)
         normalized.push(object)
     }
     return normalized
