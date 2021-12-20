@@ -29,12 +29,16 @@ function DensityMatrix(ret) {
     }
     var len = ret.length
     var n = getBaseLog(2, len)
+    Decimal_p = 5 - n
+    if (n > 4) {
+        Decimal_p = 1
+    }
     var M = []
     var qubit = []
     for (var i = 0; i < len; i++) {
         var rows = []
         for (var j = 0; j < len; j++) {
-            rows[j] = NumtoA((math.multiply(ret[i], ret[j]))).toFixed(3)
+            rows[j] = NumtoA((math.multiply(ret[i], ret[j]))).toFixed(Decimal_p)
         }
 
         qubit.push(i2b(i, n))

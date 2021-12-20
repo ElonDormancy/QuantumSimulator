@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
 
 <head>
     <meta charset="UTF-8">
@@ -8,6 +10,12 @@
     <title>Drag and Drop</title>
     <link rel="stylesheet" type="text/css" href="base.css" />
     <script src="./libs/quantum-viz.js"></script>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 
 <body>
@@ -96,7 +104,7 @@
             </div>
         </div>
         <div class="controlgate">
-            <div class="gatesec">Control Gate<span>R(<input type="text" value="N" id="Rtheta">)</span></div>
+            <div class="gatesec">Control Gate<span>n=<input type="text" id="Rtheta"></span></div>
             <div class="ctrlgate" id="cnot">
                 <div class="gate ctrl">
                     <div class="draggable" draggable="true" id="ctrl" data-control="true"></div>
@@ -128,10 +136,17 @@
             <div id='qvizdraw'></div>
         </div>
     </div>
-    <h2>Result[DensityMatrix]:</h2>
-    <div id="Matrix"></div>
-    <h2>Result[Histogram]:</h2>
-    <div id="display"></div>
+    <h2>Result</h2>
+    <div id="result_display">
+        <div class="result" id="DM">
+            <h3>Result[DensityMatrix]:</h3>
+            <div id="Matrix"></div>
+        </div>
+        <div class="result" id="Histogram">
+            <h3>Result[Live Probability]:</h3>
+            <div id="display"></div>
+        </div>
+    </div>
 
 </body>
 <link rel="stylesheet" href="./libs/default.css">

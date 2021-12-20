@@ -1,5 +1,4 @@
 function Matrix(data, options) {
-
     var margin = options.margin,
         width = options.width,
         height = options.height,
@@ -29,7 +28,7 @@ function Matrix(data, options) {
 
     var svg = d3.select(container).append("svg")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("height", 420)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -110,7 +109,7 @@ function Matrix(data, options) {
         .data(dataLabels)
         .enter().append("g")
         .attr("class", "column-label")
-        .attr("transform", function (d, i) { return "translate(" + x(i) + "," + height + ")"; });
+        .attr("transform", function (d, i) { return "translate(" + x(i) + "," + (height) + ")"; });
 
     columnLabels.append("line")
         .style("stroke", "black")

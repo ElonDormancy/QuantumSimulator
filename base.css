@@ -192,14 +192,22 @@ p {
 }
 
 #Rtheta {
-    height: 18px;
-    width: 18px;
-    line-height: 18px;
+    height: 20px;
+    width: 30px;
+    line-height: 30px;
     text-align: center;
+    border-bottom: 2px solid black;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
 }
 
 div.controlgate>div.gatesec>span {
-    margin-left: 24px;
+    margin-left: 90px;
+    line-height: 20px;
+    height: 20px;
+    color: blue;
+    font-weight: bold
 }
 
 .gatesec {
@@ -226,7 +234,6 @@ button {
 #Matrix>svg>.axis text {
     font: 10px sans-serif;
 }
-
 
 
 
@@ -280,4 +287,13 @@ button {
     z-index: 900;
     padding: 50px;
     border-radius: 10px;
+}
+
+.result {
+    display: inline-block;
+}
+
+#Histogram {
+    position: relative;
+    top: -20px;
 }

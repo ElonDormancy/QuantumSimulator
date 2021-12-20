@@ -24,9 +24,9 @@ function chart_matrix_options(ret) {
         container: "#Matrix",
         start_color: '#ffffff',
         end_color: '#d42517',
-        width: 50 * n,
-        height: 50 * n,
-        margin: { top: 20, right: 10, bottom: 20 * m + 10, left: 15 * m },
+        width: 360,
+        height: 360,
+        margin: { top: 10, right: 10, bottom: 0, left: 15 * m },
         highlight_cell_on_hover: true,
         highlight_cell_color: '#69b3a2',
         labelmarginleft: -m * 16 / 2,
@@ -40,6 +40,8 @@ const gettheta = document.getElementById("Rtheta")
 const getrows = document.getElementById("rowsinput")
 const getcols = document.getElementById("colsinput")
 const gatesets = document.querySelectorAll(".gatesets")
+const result_display = document.querySelector("#result_display")
+result_display.style.display = 'none';
 var droppablesvar = document.querySelectorAll('.droppable')
 var draggablesvar = document.querySelectorAll(".draggable")
 var qubits = document.querySelectorAll(".qubit")
@@ -49,14 +51,14 @@ document.querySelector("#deleterow").disabled = true;
 document.querySelector("#deletecol").disabled = true;
 circuit_example.disabled = true;
 gettheta.onfocus = function () {
-    if (this.value == "N") {
+    if (this.value == "") {
         this.value = ""
     }
 
 };
 gettheta.onblur = function () {
     if (this.value == "" || Number(this.value) > 1024 || Number(this.value) < 0) {
-        this.value = "N"
+        this.value = ""
     }
     var n = Number(gettheta.value)
     if (!isNaN(n) && n > 0) {
@@ -116,6 +118,7 @@ btn.onclick = function () {
         deletecol.disabled = false
         getcols.disabled = false
         getrows.disabled = false
+        result_display.style.display = "block"
         circuit_example.disabled = false;
         setTimeout(() => {
             Initialize(rows, cols)
@@ -409,7 +412,7 @@ function dragLeave(e) {
 }
 function compile() {
     var len = document.getElementsByClassName("cols").length
-    if (len > 16) {
+    if (len > 12) {
         var draw = document.getElementById("display")
         draw.innerHTML = ""
     }
@@ -430,8 +433,12 @@ function compile() {
         })
         var drawm = document.getElementById("Matrix")
         drawm.innerHTML = ""
-        if (len < 7) {
+        if (len < 5) {
+            document.querySelector("#DM").style.display = "inline-block";
             Matrix(DensityMatrix(ret), chart_matrix_options(ret))
+        }
+        else {
+            document.querySelector("#DM").style.display = "none"
         }
     }
 }
@@ -456,7 +463,7 @@ function UpdateData() {
         })
         var drawm = document.getElementById("Matrix")
         drawm.innerHTML = ""
-        if (len < 7) {
+        if (len < 5) {
             Matrix(DensityMatrix(ret), chart_matrix_options(ret));
         }
     }
