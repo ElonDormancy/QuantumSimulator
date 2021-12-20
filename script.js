@@ -654,6 +654,7 @@ function totoalqcinfor() {
     ctrlplace(ctrlgatescontainer)
     return gatecontainer
 }
+
 function ctrlplace(ctrlgatescontainer) {
     var xs = []
     for (var c of ctrlgatescontainer) {
