@@ -205,10 +205,7 @@ p {
     border-left: 0px;
     border-right: 0px;
 }
-.gate_name{
-    margin-left: 5px;
-    font-size: 18px;
-}
+
 .nav_rest{
     margin-left: 54px;
 }
@@ -224,11 +221,10 @@ p {
     font-weight: bold
 }
 
-.gatesec {
-    font-size: 18px;
-    margin: 5px;
+.gate_name{
+    font-size: 20px;
+    margin-left :20px;
 }
-
 
 button {
     margin: 10px;
@@ -315,3 +311,8 @@ button {
     position: relative;
     top: -20px;
 }
+
+.controlgate{
+    margin-top: 20px;
+}
+
