@@ -89,6 +89,10 @@ div {
     display: inline-block;
 }
 
+
+    
+
+
 p {
     font-family: "PT Serif", 'Times New Roman', Times;
     font-size: 20px;
@@ -201,9 +205,19 @@ p {
     border-left: 0px;
     border-right: 0px;
 }
+.gate_name{
+    margin-left: 5px;
+    font-size: 18px;
+}
+.nav_rest{
+    margin-left: 54px;
+}
+.ctrlgatenav{
+    display: inline-block;
+}
 
-div.controlgate>div.gatesec>span {
-    margin-left: 90px;
+#nav_input{
+    margin-left: -5px;
     line-height: 20px;
     height: 20px;
     color: blue;
@@ -287,6 +301,10 @@ button {
     z-index: 900;
     padding: 50px;
     border-radius: 10px;
+}
+
+#result_display {
+    display: none;
 }
 
 .result {

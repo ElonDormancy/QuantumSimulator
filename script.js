@@ -41,7 +41,6 @@ const getrows = document.getElementById("rowsinput")
 const getcols = document.getElementById("colsinput")
 const gatesets = document.querySelectorAll(".gatesets")
 const result_display = document.querySelector("#result_display")
-result_display.style.display = 'none';
 var droppablesvar = document.querySelectorAll('.droppable')
 var draggablesvar = document.querySelectorAll(".draggable")
 var qubits = document.querySelectorAll(".qubit")
@@ -51,9 +50,7 @@ document.querySelector("#deleterow").disabled = true;
 document.querySelector("#deletecol").disabled = true;
 circuit_example.disabled = true;
 gettheta.onfocus = function () {
-    if (this.value == "") {
-        this.value = ""
-    }
+    this.value = ""
 
 };
 gettheta.onblur = function () {

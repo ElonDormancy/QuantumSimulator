@@ -10,12 +10,6 @@
     <title>Drag and Drop</title>
     <link rel="stylesheet" type="text/css" href="base.css" />
     <script src="./libs/quantum-viz.js"></script>
-    <script>
-        MathJax = {
-            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 
 <body>
@@ -104,7 +98,9 @@
             </div>
         </div>
         <div class="controlgate">
-            <div class="gatesec">Control Gate<span>n=<input type="text" id="Rtheta"></span></div>
+            <div class="gatesec">Control Gate</div>
+            <div class="ctrlgatenav">
+                <div class="gate_name" style="margin-bottom: 6px;">CNOT</div>
             <div class="ctrlgate" id="cnot">
                 <div class="gate ctrl">
                     <div class="draggable" draggable="true" id="ctrl" data-control="true"></div>
@@ -113,6 +109,9 @@
                     <div class="draggable" draggable="true" data-c="controlgate" id="CtrlX" data-control="true"></div>
                 </div>
             </div>
+            </div>
+            <div class="ctrlgatenav nav_rest">
+                <div class="gate_name"><span >CR</span> <span id="nav_input">n=<input type="text" id="Rtheta"></span></div>
             <div class="ctrlgate" id="crx">
                 <div class="gate ctrl">
                     <div class="draggable" draggable="false" id="ctrl" data-control="true"></div>
@@ -122,6 +121,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </div>
     </div>
@@ -140,11 +140,11 @@
     <h2>Output</h2>
     <div id="result_display">
         <div class="result" id="DM">
-            <h3>DensityMatrix:</h3>
+            <h3>Density Matrix:</h3>
             <div id="Matrix"></div>
         </div>
         <div class="result" id="Histogram">
-            <h3>Live Probability:</h3>
+            <h3>Projection Probability:</h3>
             <div id="display"></div>
         </div>
     </div>
