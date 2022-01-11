@@ -8,14 +8,20 @@ class GateSet {
     HBlock = '<div class="draggable" draggable="true" id="H" data-control="false"></div>'
     SBlcok = '<div class="draggable" draggable="true" id="S" data-control="false"></div>'
     TBlcok = '<div class="draggable" draggable="true" id="T" data-control="false"></div>'
-    CtrlBlock = '<div class="draggable" draggable="true" id="ctrl" data-control="true"></div>'
-    CtrlX = '<div class="draggable" draggable="true" data-c="controlgate" id="CtrlX" data-control="true"></div>'
-    CtrlR(n) {
-        var CtrlR = `<div class="draggable" draggable="true" data-c="controlgate" id="CtrlR${n}" data-control="true">`
+    CtrlDot(order) {
+        var CtrlDot = `<div class="draggable" draggable="true" id="ctrl" data-control="true" data-order="${order}"></div>`
+        return CtrlDot
+    }
+    CtrlX(order) {
+        var CtrlX = `<div class="draggable" draggable="true" data-c="controlgate" id="CtrlX" data-control="true"
+        data-order="${order}"></div>`
+        return CtrlX
+    }
+    CtrlR(n, order) {
+        var CtrlR = `<div class="draggable" draggable="true" data-c="controlgate" id="CtrlR${n}" data-order="${order}"  data-control="true">`
         return CtrlR
     }
 }
-
 
 
 
@@ -44,12 +50,13 @@ function Bell(rows, cols) {
     var gate = new GateSet()
     var M = init_matrix(n, m)
     M[0][0] = gate.HBlock
-    M[0][1] = gate.CtrlBlock
-    M[1][1] = gate.CtrlX
+    M[0][1] = gate.CtrlDot(-1)
+    M[1][1] = gate.CtrlX(-1)
     return M
 }
 
 function GHZ(rows, cols) {
+    var order = -1
     var n = 3
     var m = 3
     if (rows > 3) {
@@ -67,9 +74,10 @@ function GHZ(rows, cols) {
     M[0][0] = gate.HBlock
     var startindex = 1
     for (var i = 0; i < n - 1; i++) {
-        M[i][startindex] = gate.CtrlBlock
-        M[i + 1][startindex] = gate.CtrlX
+        M[i][startindex] = gate.CtrlDot(order)
+        M[i + 1][startindex] = gate.CtrlX(order)
         startindex += 1
+        order -= 1
     }
     return M
 }
@@ -82,6 +90,7 @@ function QFT(rows, cols) {
         cls = cols
     }
     Initialize(rows, cls)
+    var number_order = -1
     var gate = new GateSet()
     var M = init_matrix(rows, cls)
     var startindex = 0
@@ -89,9 +98,10 @@ function QFT(rows, cols) {
         M[i][startindex] = gate.HBlock
         var k = 1
         for (var j = startindex + 1; j < startindex + nqubit; j++) {
-            M[i][j] = gate.CtrlR(k + 1)
-            M[i + k][j] = gate.CtrlBlock
+            M[i][j] = gate.CtrlR(k + 1, number_order)
+            M[i + k][j] = gate.CtrlDot(number_order)
             k++
+            number_order -= 1
         }
         startindex += nqubit;
         nqubit = nqubit - 1
@@ -112,7 +122,7 @@ function SuperPosition(rows, cols) {
 function MosaicGate(rows, cols, algorithm) {
     var GateM = algorithm(rows, cols)
     setTimeout(() => {
-        var dragarea = document.querySelector("#DrawArea")
+        var dragarea = document.querySelector("#Dragable_Area")
         var cells = dragarea.querySelectorAll(".row")
         for (var cell of cells) {
             var Areacols = cell.getAttribute("data-cols")
@@ -127,7 +137,7 @@ function MosaicGate(rows, cols, algorithm) {
 }
 
 function GetAreaRowCol() {
-    var rows = document.querySelector(".rows").childElementCount
+    var rows = document.querySelector("#Dragable_Area").childElementCount
     var cols = document.querySelector(".cols").childElementCount - 1
     var obj = {
         row: rows,

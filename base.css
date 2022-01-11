@@ -1,7 +1,13 @@
-.Navbars {
+.Navigation_Bars {
     width: 1000px;
     height: 60px;
     background-color: burlywood;
+}
+
+h2 {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 div {
@@ -10,14 +16,15 @@ div {
     user-select: none;
 }
 
-.Navbars>a {
+
+.Navigation_Bars>a {
     text-decoration: none;
     color: black;
     font-family: 'Times New Roman', Times, serif;
     text-align: center;
 }
 
-.Navbar {
+.Navigation_Bar {
     width: 80px;
     height: 30px;
     text-align: center;
@@ -29,18 +36,18 @@ div {
 
 }
 
-#display {
+#histogram {
     margin-left: 10px;
 }
 
-.nav:hover {
+.Navigation_Element:hover {
     color: black;
     font-weight: 700;
     font-family: arial;
     font-size: 18px;
 }
 
-.Navbar>a {
+.Navigation_Bar>a {
     text-decoration: none;
     color: gray;
     font-family: arial;
@@ -90,7 +97,7 @@ div {
 }
 
 
-    
+
 
 
 p {
@@ -113,7 +120,7 @@ p {
 }
 
 .noplacement {
-    background-image: url('./images/Banlogo.svg');
+    background-image: url('./images/No_Placement.svg');
     height: 50px;
     width: 50px;
     display: inline-block;
@@ -138,6 +145,7 @@ p {
 
 .qubit {
     cursor: pointer;
+    -webkit-user-drag: none;
 }
 
 .gate {
@@ -191,7 +199,7 @@ p {
     background-image: url('./images/Rx.svg');
 }
 
-#dragplot {
+#New_Area {
     margin-top: 10px;
 }
 
@@ -206,14 +214,15 @@ p {
     border-right: 0px;
 }
 
-.nav_rest{
+.Rest_Navigation {
     margin-left: 54px;
 }
-.ctrlgatenav{
+
+.Ctrlgate_Navigation {
     display: inline-block;
 }
 
-#nav_input{
+#nav_input {
     margin-left: -5px;
     line-height: 20px;
     height: 20px;
@@ -221,12 +230,12 @@ p {
     font-weight: bold
 }
 
-.gate_name{
+.Gate_Name {
     font-size: 20px;
-    margin-left :20px;
+    margin-left: 20px;
 }
 
-button {
+.init>button {
     margin: 10px;
     width: 100px;
     height: 20px;
@@ -253,7 +262,7 @@ button {
     shape-rendering: crispEdges;
 }
 
-#display>svg>.axis line {
+#histogram>svg>.axis line {
     visibility: hidden;
 }
 
@@ -263,7 +272,7 @@ button {
 }
 
 
-#DrawArea {
+#Dragable_Area {
     float: left;
 }
 
@@ -271,32 +280,6 @@ button {
 #qvizarea {
     margin-top: -12px;
     display: inline-block;
-}
-
-#content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 900;
-    text-align: center;
-    display: none;
-}
-
-#content div {
-    margin-top: 50px;
-    border-style: solid;
-    border-color: black;
-    border-width: 5px;
-    display: inline-block;
-    width: 800px;
-    height: 600px;
-    overflow-y: scroll;
-    background-color: #fff;
-    z-index: 900;
-    padding: 50px;
-    border-radius: 10px;
 }
 
 #result_display {
@@ -312,7 +295,104 @@ button {
     top: -20px;
 }
 
-.controlgate{
+.Control_Gates {
     margin-top: 20px;
 }
 
+.title {
+    font-size: 20px;
+    font-style: normal;
+    font-family: "Arial";
+}
+
+.title>button {
+    width: 100px;
+    height: 20px;
+    font-size: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.click_close {
+    cursor: pointer;
+    width: 10px;
+    height: 10px;
+    background: url("./images/Close.svg");
+    margin-left: 100%;
+    z-index: 100;
+}
+
+
+
+.adjust_package_ac {
+    width: 20px;
+    height: 50px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    background-color: green;
+    z-index: 50;
+}
+
+.adjust_package_ar {
+    width: 50px;
+    height: 20px;
+    margin: auto;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    opacity: 0;
+    background-color: yellow;
+    z-index: 50;
+}
+
+.adjust_package_dr {
+    width: 50px;
+    height: 20px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    background-color: red;
+    z-index: 50;
+}
+
+.adjust_package_dc {
+    width: 20px;
+    height: 50px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    opacity: 0;
+    background-color: blue;
+    z-index: 50;
+}
+
+.gate_package {
+    opacity: 0.5;
+    background-color: gray;
+}
+
+.rubbish {
+    height: 50px;
+    width: 50px;
+    margin: 2px;
+    background-image: url("./images/Ashcan_close.svg");
+    display: inline-block;
+}
+
+.rubbish:hover {
+    height: 50px;
+    width: 50px;
+    margin: 2px;
+    background-image: url("./images/Ashcan_open.svg");
+    display: inline-block;
+}

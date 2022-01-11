@@ -1,6 +1,25 @@
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// Copyright (c) Dormancy.
+// Licensed under the MIT license.
 //------
 //Oct 30 2021
 //Author Dormancy
+//------
+//Jan 2 2022
+//Change the varibles names
+//Add notes
+//------
+//Jan 7 2022
+//Fix the bug
+//1.No placement two cnot gate in the one cols
+//And change the view perspective of the result
+//Add notes
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+
+//Initialize the Parameter
 //------
 //Global Varibles
 //qvizdraw
@@ -8,7 +27,7 @@
 //draggablesvar
 //qubits
 //------
-//Initialize the Parameter
+
 var qvizdraw = {
     qubits: [],
     operations: [],
@@ -17,10 +36,11 @@ function Init_algorithm() {
     var options = document.getElementById('example').children;
     options[0].selected = true
 }
-function chart_matrix_options(ret) {
+function chart_matrix_options(ret, text_exist) {
     var n = ret.length
     var m = getBaseLog(2, n)
     var chart_options = {
+        text_exist: text_exist,
         container: "#Matrix",
         start_color: '#ffffff',
         end_color: '#d42517',
@@ -34,12 +54,14 @@ function chart_matrix_options(ret) {
     return chart_options
 }
 //Initialize the navigation bar
-const thenumberofqubit = 6
+var Whether_View_Result = false
+const qubit_number = 6
+var num_gates = 2
 const circuit_example = document.getElementById("example")
 const gettheta = document.getElementById("Rtheta")
 const getrows = document.getElementById("rowsinput")
 const getcols = document.getElementById("colsinput")
-const gatesets = document.querySelectorAll(".gatesets")
+const gatesets = document.querySelectorAll(".Gate_Sets")
 const result_display = document.querySelector("#result_display")
 var droppablesvar = document.querySelectorAll('.droppable')
 var draggablesvar = document.querySelectorAll(".draggable")
@@ -49,9 +71,10 @@ document.querySelector("#addcol").disabled = true;
 document.querySelector("#deleterow").disabled = true;
 document.querySelector("#deletecol").disabled = true;
 circuit_example.disabled = true;
+getrows.value = 3
+getcols.value = 5
 gettheta.onfocus = function () {
     this.value = ""
-
 };
 gettheta.onblur = function () {
     if (this.value == "" || Number(this.value) > 1024 || Number(this.value) < 0) {
@@ -84,6 +107,14 @@ getcols.onblur = function () {
         this.value = "Cols"
     }
 }
+//Count the number of element in array
+function CountArray(arr, num) {
+    var i = 0;
+    arr.find(function (ele) {
+        ele === num ? i++ : '';
+    })
+    return i
+}
 
 //str[HTML strings]=>append HTML nodes
 function parseElement(str) {
@@ -99,12 +130,13 @@ function stringIze(obj) {
 }
 
 
-//BUTTON Start/Restart
+
+//BUTTON Start/restart_dragarea
 btn.onclick = function () {
     var rows = getrows.value
     var cols = getcols.value
     if (rows != "Rows" && cols != "Cols") {
-        restart()
+        restart_dragarea()
         var addrow = document.querySelector("#addrow")
         var addcol = document.querySelector("#addcol")
         var deleterow = document.querySelector("#deleterow")
@@ -122,13 +154,12 @@ btn.onclick = function () {
         }, 0);
     }
 }
+//==========================================================
 
-
-function restart() {
-    var area = document.querySelector("#DrawArea")
-    area.innerHTML = '<div class="rows"></div>'
+//==========================================================
+function restart_dragarea() {
     setTimeout(() => {
-        var rows = document.querySelector(".rows")
+        var rows = document.querySelector("#Dragable_Area")
         rows.innerHTML = '<div class="cols"></div>'
         Init_algorithm()
     }, 0);
@@ -136,7 +167,6 @@ function restart() {
 
 function Initialize(rows, cols) {
     qvizdraw = { qubits: [], operations: [] }
-
     var arr1 = [];
     arr1.push()
     for (var i = 0; i < cols; i++) {
@@ -149,13 +179,19 @@ function Initialize(rows, cols) {
         arr2.push(`<div class="cols" data-rows = "${i}">` + `<img data-index="0" data-qindex="${i}" class="qubit" src="./images/ket0.svg" alt="\ket{0}" height="50px" width="50px" />` + temp.toString() + '</div>');
         qvizdraw["qubits"].push({ id: i })
     }
-    document.querySelector('.rows').innerHTML = arr2.join('');
+    document.querySelector('#Dragable_Area').innerHTML = arr2.join('');
     setTimeout(() => {
-        droppablesvar = document.querySelectorAll('.droppable')//CHANGE THE GLOBAL VARS
-        qubits = document.querySelectorAll(".qubit")//CHANGE THE GLOBAL VARS
+        //CHANGE THE GLOBAL VARS
+        droppablesvar = document.querySelectorAll('.droppable')
+        //CHANGE THE GLOBAL VARS
+        qubits = document.querySelectorAll(".qubit")
+        //Add Listen to the drop block
         droplisten(droppablesvar)
+        //Add Listen to the init qubits
         qubitreverse(qubits)
+        //Update gate information
         totoaldrawqc(totoalqcinfor())
+        //Update result
         compile()
     }, 0);
 }
@@ -173,10 +209,15 @@ function addcol() {
         temp[i].appendChild(o)
     }
     setTimeout(() => {
+        //Init the algorithm
         Init_algorithm()
-        droppablesvar = document.querySelectorAll('.droppable')//CHANGE THE GLOBAL VARS
+        //CHANGE THE GLOBAL VARS
+        droppablesvar = document.querySelectorAll('.droppable')
+        //Add listener to the cols added
         droplisten(droppablesvar)
+        //Update gate information
         totoaldrawqc(totoalqcinfor())
+        //Update result
         compile()
     }, 0);
 
@@ -202,60 +243,55 @@ function addrow() {
         o.setAttribute("data-rows", `${rowindex.length}`)
         o.append(parseElement(temp)[i]);
     }
-    document.querySelector(".rows").append(o)
+    document.querySelector("#Dragable_Area").append(o)
     var qubits = qvizdraw["qubits"]
     var index = qubits[qubits.length - 1]["id"]
     qvizdraw["qubits"].push({ id: index + 1 })
     setTimeout(() => {
+        //Init the algorithm
         Init_algorithm()
-        droppablesvar = document.querySelectorAll('.droppable')//CHANGE THE GLOBAL VARS
-        qubits = document.querySelectorAll(".qubit")//CHANGE THE GLOBAL VARS
+        //CHANGE THE GLOBAL VARS
+        droppablesvar = document.querySelectorAll('.droppable')
+        //CHANGE THE GLOBAL VARS
+        qubits = document.querySelectorAll(".qubit")
+        //Add Listen to the drop block
         droplisten(droppablesvar)
+        //Add Listen to the init qubits
         qubitreverse(qubits)
+        //Update gate information
         totoaldrawqc(totoalqcinfor())
+        //Update result
         compile()
     }, 0);
 }
 
-function FindCtrl(x) {
-    var area = document.querySelector("#DrawArea")
-    var draggables = area.querySelectorAll(".draggable")
+
+
+function Remove_Single_Ctrl(x) {
+    var draggables = document.querySelectorAll(".draggable")
     for (var i = 0; i < draggables.length; i++) {
         var sdrag = draggables[i];
-        var pcol = sdrag.parentNode;
-        var tmpx = pcol.getAttribute("data-cols");
+        var order = sdrag.getAttribute("data-order")
         var gatectrl = sdrag.getAttribute("data-control")
-        if (x == tmpx && gatectrl == "true") {
+        if (x == order && gatectrl == "true") {
             sdrag.remove()
         }
     }
 }
-function CountArray(arr, num) {
-    var i = 0;
-    arr.find(function (ele) {
-        ele === num ? i++ : '';
-    })
-    return i
-}
 
-function DeleteSingleCtrl() {
+function delete_single_ctrl_gate() {
     var tmp = []
-    var area = document.querySelector("#DrawArea")
-    var draggables = area.querySelectorAll(".draggable")
-    for (var i = 0; i < draggables.length; i++) {
-        var dragging = draggables[i];
+    var draggables = document.querySelectorAll(".draggable")
+    for (var dragging of draggables) {
         if (dragging.getAttribute("data-control") == "true") {
-            var pcol = dragging.parentNode;
-            var x = pcol.getAttribute("data-cols");
-            tmp.push(x)
+            tmp.push(dragging.getAttribute("data-order"))
         }
     }
     for (var i of tmp) {
         if (CountArray(tmp, i) < 2) {
-            FindCtrl(i)
+            Remove_Single_Ctrl(i)
         }
     }
-
 }
 
 function deleterow() {
@@ -273,7 +309,7 @@ function deleterow() {
         Init_algorithm()
         totoaldrawqc(totoalqcinfor())
         setTimeout(() => {
-            DeleteSingleCtrl()
+            delete_single_ctrl_gate()
         }, 0);
     }, 0);
 }
@@ -290,7 +326,7 @@ function deletecol() {
         temp[len - 1].remove()
     }
     setTimeout(() => {
-        DeleteSingleCtrl()
+        delete_single_ctrl_gate()
         totoaldrawqc(totoalqcinfor())
         compile()
         Init_algorithm()
@@ -302,9 +338,12 @@ function qubitreverse(qubits) {
         qubit.addEventListener('click', qreverse);
     }
 }
+
+
+
 function qreverse() {
     var row = this.parentNode.getAttribute("data-rows")
-    var temp = document.querySelectorAll("#qvizdraw> svg >text ")
+    var temp = document.querySelectorAll("#qvizdraw> svg >text")
     var qubit = temp[row]
     if (this.getAttribute("data-index") == 0) {
         this.setAttribute("src", "./images/ket1.svg")
@@ -323,6 +362,22 @@ function qreverse() {
         }, 0);
     }
 }
+
+function Add_Rubbish_L() {
+    var rubbish = document.querySelector(".rubbish")
+    rubbish.addEventListener('dragover', dragOver);
+    rubbish.addEventListener('dragleave', dragLeave);
+    rubbish.addEventListener('dragenter', dragEnter);
+    rubbish.addEventListener('drop', RubbishDrop);
+}
+Add_Rubbish_L()
+function RubbishDrop(e) {
+    e.preventDefault()
+    this.className = "rubbish"
+    var dragitem = document.querySelector(".dragging")
+    dragitem.remove()
+}
+
 
 function AddL(tmp) {
     tmp.addEventListener('dragover', dragOver);
@@ -349,35 +404,15 @@ function draggableL(temp) {
     }
 }
 
-
-function dragStart() {
-    this.className += ' dragging';
-    var temp = this.parentNode;
-    var tmp = temp.parentNode;
-    if ((this.id == "ctrl" || this.getAttribute("data-c") == "controlgate") && tmp.className == "ctrlgate") {
-        var nos = document.querySelectorAll(".ctrlline")
-        for (var no of nos) {
-            no.className = "noplacement"
-        }
-    }
-    if (this.id == "ctrl" || this.getAttribute("data-c") == "controlgate") {
-        var nos = document.querySelectorAll(".ctrlline")
-        for (var no of nos) {
-            AddL(no)
-        }
-    }
-}
 function dragEnd() {
+    delete_single_ctrl_gate()
     this.className = 'draggable';
     var nos = document.querySelectorAll(".noplacement")
     for (var no of nos) {
-        no.className = "ctrlline"
+        no.className = "droppable row"
+        AddL(no)
     }
     setTimeout(() => {
-        var nos = document.querySelectorAll(".ctrlline")
-        for (var no of nos) {
-            RemoveL(no)
-        }
         Init_algorithm()
         draggablesvar = document.querySelectorAll(".draggable")
         draggableL(draggablesvar)
@@ -397,12 +432,15 @@ function dragOver(e) {
 
 function dragEnter(e) {
     e.preventDefault();
-    this.className += ' drag-over';
+    if (this.className != "ctrlline row" || this.className != "rubbish") {
+        this.className += ' drag-over';
+    }
+
 }
 
 function dragLeave(e) {
     e.preventDefault();
-    if (this.className != "ctrlline") {
+    if (this.className != "ctrlline row" || this.className != "rubbish") {
         this.className = 'droppable row';
     }
 
@@ -410,7 +448,7 @@ function dragLeave(e) {
 function compile() {
     var len = document.getElementsByClassName("cols").length
     if (len > 12) {
-        var draw = document.getElementById("display")
+        var draw = document.getElementById("histogram")
         draw.innerHTML = ""
     }
     else {
@@ -418,7 +456,7 @@ function compile() {
         var ret = applygate(vec, GetApplyList())
         var alphabet = GetFrequency(ret)
         console.log(alphabet)
-        var draw = document.getElementById("display")
+        var draw = document.getElementById("histogram")
         draw.innerHTML = ""
         chart = BarChart(alphabet, {
             x: d => d.qubit,
@@ -428,22 +466,36 @@ function compile() {
             height: 400,
             color: "#69b3a2"
         })
-        var drawm = document.getElementById("Matrix")
-        drawm.innerHTML = ""
+        var draw_m = document.getElementById("Matrix")
+        draw_m.innerHTML = ""
         if (len < 5) {
-            document.querySelector("#DM").style.display = "inline-block";
-            Matrix(DensityMatrix(ret), chart_matrix_options(ret))
+            document.querySelector("#Density_Matrix").style.display = "inline-block";
+            if (len > 3) {
+                Matrix(DensityMatrix(ret), chart_matrix_options(ret, false))
+            }
+            else { Matrix(DensityMatrix(ret), chart_matrix_options(ret, Whether_View_Result)) }
         }
         else {
-            document.querySelector("#DM").style.display = "none"
+            document.querySelector("#Density_Matrix").style.display = "none"
         }
     }
 }
 
+var w_v_r = document.querySelector("#View_Result")
+
+w_v_r.addEventListener("mousedown", function () {
+    Whether_View_Result = true
+    compile()
+})
+
+w_v_r.addEventListener("mouseup", function () {
+    Whether_View_Result = false
+    compile()
+})
 
 function UpdateData() {
     var len = document.getElementsByClassName("cols").length
-    if (len > thenumberofqubit) {
+    if (len > qubit_number) {
         return ""
     }
     else {
@@ -461,33 +513,48 @@ function UpdateData() {
         var drawm = document.getElementById("Matrix")
         drawm.innerHTML = ""
         if (len < 5) {
-            Matrix(DensityMatrix(ret), chart_matrix_options(ret));
+            if (len > 3) {
+                Matrix(DensityMatrix(ret), chart_matrix_options(ret, false))
+            }
+            else { Matrix(DensityMatrix(ret), chart_matrix_options(ret, Whether_View_Result)) }
         }
     }
 }
+function CheckContrlGate(cgs) {
+    var c0 = cgs[0].childElementCount
+    var c1 = cgs[1].childElementCount
+    var check1 = (c0 == 1 && c1 == 0)
+    var check2 = (c0 == 0 && c1 == 1)
+    return check1 || check2
+}
+
+
 
 function dragDrop(e) {
     e.preventDefault()
     this.className = 'droppable row';
     var dragitem = document.querySelector(".dragging")
     var gateClass = dragitem.getAttribute("id")
-    var wcgate = dragitem.getAttribute("data-control")
+    var whether_cgate = dragitem.getAttribute("data-control")
     dragitem.className = "draggable"
-    if (wcgate == "true") {
+    if (whether_cgate == "true") {
         var cgs = document.querySelector("#cnot").querySelectorAll(".gate")
         var crx = document.querySelector("#crx").querySelectorAll(".gate")
         if (CheckContrlGate(cgs)) {
-            cgs[0].innerHTML = '<div class="draggable" draggable="true" id="ctrl" data-control="true"></div>'
-            cgs[1].innerHTML = '<div class="draggable" draggable="true" data-c="controlgate" id="CtrlX" data-control="true"></div>'
+            num_gates += 1
+            cgs[0].innerHTML = `<div class="draggable" draggable="true" id="ctrl" data-control="true" data-order="${num_gates}"></div>`
+            cgs[1].innerHTML = `<div class="draggable" draggable="true" data-c="controlgate" id="CtrlX" data-control="true" data-order="${num_gates}"></div>`
         }
-        if (CheckContrlGate(crx)) {
-            crx[0].innerHTML = '<div class="draggable" draggable="false" id="ctrl" data-control="true"></div>'
-            crx[1].innerHTML = '<div class="draggable" draggable="false" data-c="controlgate" id="CtrlRx" data-control="true">'
+        else if (CheckContrlGate(crx)) {
+            num_gates += 1
+            crx[0].innerHTML = `<div class="draggable" draggable="false" id="ctrl" data-control="true" data-order="${num_gates}"></div>`
+            crx[1].innerHTML = `<div class="draggable" draggable="false" data-c="controlgate" id="CtrlRx" data-control="true" data-order="${num_gates}">`
         }
     }
     else {
-        var sg = document.querySelector(".singlegate").querySelector("." + gateClass.toString())
+        var sg = document.querySelector(".Single_Gates").querySelector("." + gateClass.toString())
         sg.innerHTML = (stringIze(dragitem))
+        setTimeout(() => { delete_single_ctrl_gate() }, 0);
     }
     this.innerHTML = (stringIze(dragitem))
     setTimeout(() => {
@@ -500,16 +567,20 @@ function dragDrop(e) {
 
 }
 
-function CheckContrlGate(cgs) {
-    var c0 = cgs[0].childElementCount
-    var c1 = cgs[1].childElementCount
-    var check1 = c0 == 1 && c1 == 0
-    var check2 = c0 == 0 && c1 == 1
-    return check1 || check2
-}
 
 // ----------------Draw The Quantum Circuit with Qviz--------------
 // ----------------------------------------------------------------
+function qviz_reverse() {
+    var qubits_ls = []
+    var qubits = document.querySelectorAll(".qubit")
+    for (var qubit of qubits) {
+        var init = qubit.getAttribute("data-index")
+        qubits_ls.push(init)
+    }
+    return qubits_ls
+}
+
+
 
 //USE GLOBAL VAR
 function drawQC() {
@@ -517,32 +588,43 @@ function drawQC() {
         var sampleDiv = document.getElementById('qvizdraw');
         qviz.draw(qvizdraw, sampleDiv, qviz.STYLES['Default']);
     }
+    var qubits_ls = qviz_reverse()
+    var rows = qubits_ls.length
+    var temp = document.querySelectorAll("#qvizdraw> svg >text")
+    for (var i = 0; i < rows; i++) {
+        if (qubits_ls[i] == "0") { temp[i].innerHTML = "|0⟩" }
+        else { temp[i].innerHTML = "|1⟩" }
+    }
 }
 
-
+function Get_Item_Information(item) {
+    var gate = item.getAttribute("id")
+    if (gate.length > 4) {
+        gate = gate.slice(4)
+    }
+    var pcol = item.parentNode;
+    var prow = pcol.parentNode;
+    var x = pcol.getAttribute("data-cols");
+    var y = prow.getAttribute("data-rows");
+    var control = item.getAttribute("data-control");
+    var order = item.getAttribute("data-order");
+    var arr = { xindex: x, yindex: y, gateclass: gate, iscontrol: control, ctrlgate_order: order };
+    return arr
+}
 
 //Draggables List => GateInformation
 function GetCoordinates(draggables) {
     var gateinformation = []
-    for (var i = 0; i < draggables.length; i++) {
-        var dragging = draggables[i]
-        var gate = dragging.getAttribute("id")
-        if (gate.length > 4) {
-            gate = gate.slice(4)
-        }
-        var pcol = dragging.parentNode;
-        var prow = pcol.parentNode;
+    for (var drag_item of draggables) {
+        var pcol = drag_item.parentNode;
         var x = pcol.getAttribute("data-cols");
-        var y = prow.getAttribute("data-rows");
-        var control = dragging.getAttribute("data-control");
-        var arr = { xindex: x, yindex: y, gateclass: gate, iscontrol: control };
+        var arr = Get_Item_Information(drag_item)
         if (x != null) {
             gateinformation.push(arr)
         }
     }
     return gateinformation
 }
-
 
 //GateInformation = > DrawQVIZ
 function totoaldrawqc(qcinfor) {
@@ -551,7 +633,6 @@ function totoaldrawqc(qcinfor) {
     var inforcontainer = []
     qvizdraw["operations"] = []
     var cols = document.querySelector(".cols").childElementCount
-
     for (var i = 0; i < cols - 1; i++) {
         var container = {
             index: 0,
@@ -629,17 +710,15 @@ function totoalqcinfor() {
             if (sgate["gateclass"] == "ctrl") {
                 ctrlsets.push(sgate)
             }
-            else {
-                ctrlgatesets.push(sgate)
-            }
+            else { ctrlgatesets.push(sgate) }
             for (var i = 0; i < ctrlsets.length; i++) {
                 for (var j = 0; j < ctrlgatesets.length; j++) {
                     var ctrlindex = ctrlsets[i]["xindex"]
                     var ctrlgateindex = ctrlgatesets[j]["xindex"]
-                    if (ctrlindex == ctrlgateindex) {
+                    if (ctrlindex == ctrlgateindex && (ctrlsets[i]["ctrlgate_order"] == ctrlgatesets[j]["ctrlgate_order"])) {
                         var temp = {
                             ctrl: ctrlsets[i],
-                            ctrlgate: ctrlgatesets[j],
+                            ctrlgate: ctrlgatesets[j]
                         }
                         var tmp = {
                             gateclass: 'cg',
@@ -660,26 +739,24 @@ function totoalqcinfor() {
 }
 
 function ctrlplace(ctrlgatescontainer) {
-    var xs = []
+    remove_ctrlline()
     for (var c of ctrlgatescontainer) {
         var cg = c["gateinfor"]
-        noplacement(cg["ctrl"]["xindex"], cg["ctrl"]["yindex"], cg["ctrlgate"]["yindex"])
-        xs.push(cg["ctrl"]["xindex"])
+        add_ctrlline(cg["ctrl"]["xindex"], cg["ctrl"]["yindex"], cg["ctrlgate"]["yindex"], cg["ctrlgate"]["ctrlgate_order"], cg["ctrl"]["ctrlgate_order"])
     }
-    placement(xs)
 }
 
-function noplacement(indexx, ctrly, ctrlgatey) {
+function add_ctrlline(index_x, ctrl_y, ctrlgate_y, ctrl_order, ctrl_gate_order) {
     var droppables = document.querySelectorAll(".droppable")
     for (var drop of droppables) {
         var x = drop.getAttribute("data-cols")
         var temp = drop.parentNode
         var y = parseInt(temp.getAttribute("data-rows"))
-        var check1 = (y > parseInt(ctrly) && y < parseInt(ctrlgatey))
-        var check2 = (y < parseInt(ctrly) && y > parseInt(ctrlgatey))
-        var allc = (check1 || check2)
-        if (x == indexx && allc) {
-            drop.className = "ctrlline"
+        var check1 = (y > parseInt(ctrl_y) && y < parseInt(ctrlgate_y))
+        var check2 = (y < parseInt(ctrl_y) && y > parseInt(ctrlgate_y))
+        var checkout = (check1 || check2)
+        if ((x == index_x && checkout) && (ctrl_order == ctrl_gate_order)) {
+            drop.className = "ctrlline row"
             drop.removeEventListener('dragover', dragOver);
             drop.removeEventListener('dragleave', dragLeave);
             drop.removeEventListener('dragenter', dragEnter);
@@ -687,21 +764,98 @@ function noplacement(indexx, ctrly, ctrlgatey) {
         }
     }
 }
-
-function placement(indexxs) {
-    var noplacements = document.querySelectorAll(".ctrlline")
-    for (var nop of noplacements) {
-        var x = nop.getAttribute("data-cols")
-        if (indexxs.indexOf(x) == -1) {
-            nop.className = "droppable rows"
-            nop.addEventListener('dragover', dragOver);
-            nop.addEventListener('dragleave', dragLeave);
-            nop.addEventListener('dragenter', dragEnter);
-            nop.addEventListener('drop', dragDrop);
-        }
+//When the two control gate are not in a col,remove the ctrlline
+function remove_ctrlline() {
+    var ctrlline_placements = document.querySelectorAll(".ctrlline")
+    for (var ctrlline of ctrlline_placements) {
+        ctrlline.className = "droppable row"
+        AddL(ctrlline)
     }
 }
 
+function activate_ctrlline(col) {
+    var lines = document.querySelectorAll(".ctrlline")
+    for (line of lines) {
+        if (line.getAttribute("data-cols") == col) {
+            AddL(line)
+        }
+    }
+}
+function ProhibitedCol(col) {
+    var droppables = document.querySelectorAll(".droppable")
+    for (var drop of droppables) {
+        var x = drop.getAttribute("data-cols")
+        var element = drop.childElementCount
+        if (x == col && (element == 0)) {
+            drop.className = "noplacement"
+            drop.removeEventListener('dragover', dragOver);
+            drop.removeEventListener('dragleave', dragLeave);
+            drop.removeEventListener('dragenter', dragEnter);
+            drop.removeEventListener('drop', dragDrop);
+        }
+    }
+}
+//Check what you are dragging whether has the matched ctrl gate in the same cols
+function CheckColCG(item) {
+    var whether_cgate = item.getAttribute("data-control")
+    var result = false
+    if (whether_cgate == "true") {
+        var item_parentNode = item.parentNode;
+        var p_parentNode = item_parentNode.parentNode;
+        var check_row = p_parentNode.getAttribute("data-rows")
+        var check_col = item_parentNode.getAttribute("data-cols")
+        var check_order = item.getAttribute("data-order")
+        var draggables = document.querySelectorAll(".draggable")
+        for (drag_item of draggables) {
+            var order = drag_item.getAttribute("data-order")
+            var col_temp = drag_item.parentNode
+            var row_temp = col_temp.parentNode
+            var col = col_temp.getAttribute("data-cols")
+            var row = row_temp.getAttribute("data-rows")
+            if ((check_order == order && check_col == col) && (check_row != row)) {
+                result = true
+                break
+            }
+        }
+    }
+    return result
+}
+
+
+
+function dragStart() {
+    this.className += ' dragging';
+    var col_temp = this.parentNode;
+    var this_col = col_temp.getAttribute("data-cols")
+    var all_draggables = document.querySelectorAll(".draggable")
+    var tmp = []
+    if (this.getAttribute("data-control") == "false") {
+        var nos = document.querySelectorAll(".ctrlline")
+        for (var no of nos) {
+            no.className = "noplacement"
+        }
+    }
+    else {
+        var area = document.querySelector("#Dragable_Area")
+        var area_draggables = area.querySelectorAll(".draggable")
+        for (var dragging of area_draggables) {
+            if (dragging.getAttribute("data-control") == "true") {
+                tmp.push(dragging.getAttribute("data-order"))
+            }
+        }
+        for (var drag_item of all_draggables) {
+            var drag_item_parentNode = drag_item.parentNode;
+            var everycol = drag_item_parentNode.getAttribute("data-cols")
+            var everyorder = drag_item.getAttribute("data-order")
+            if (CountArray(tmp, everyorder) == 2 && CheckColCG(drag_item)) {
+                if (this_col != everycol) {
+                    ProhibitedCol(everycol)
+                }
+            }
+        }
+        activate_ctrlline(this_col)
+    }
+}
 
 function GenerateRxBackground(n) {
     var ret = `<svg width="50" height="50" xmlns="http://www.w3.org/2000/svg"><g><rect id="svg_1" height="50" width="50" y="0" x="0" stroke-width="3" stroke="#000" fill="#ccccd6"/><text style="cursor: move;" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_3" y="32.997583" x="10.33415" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">R</text><text style="cursor: move;" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="12" id="svg_3" y="32.997583" x="28" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">${n}</text></g></svg>`

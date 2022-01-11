@@ -8,6 +8,7 @@ function Matrix(data, options) {
         highlightCellOnHover = options.highlight_cell_on_hover,
         highlightCellColor = options.highlight_cell_color,
         labelmarginleft = options.labelmarginleft;
+        text_exist = options.text_exist
 
     var dataValues = data['values'];
     var dataLabels = data['labels'];
@@ -50,7 +51,7 @@ function Matrix(data, options) {
         .range([0, height]);
 
     var colorMap = d3.scaleLinear()
-        .domain([minValue, maxValue])
+        .domain([0, 0.1])
         .range([startColor, endColor]);
 
     var row = svg.selectAll(".row")
@@ -74,33 +75,52 @@ function Matrix(data, options) {
         .data(function (d, i) { return dataValues[i]; })
         .style("fill", colorMap);
 
-    if (highlightCellOnHover) {
+    if (text_exist){
         cell
-            .on("mouseover", function (d) {
-                d3.select(this).style("fill", highlightCellColor);
-                d3.select(this)
-                    .append("text")
-                    .attr("dy", ".32em")
-                    .attr("x", x.bandwidth() / 2)
-                    .attr("y", y.bandwidth() / 2 - 4)
-                    .attr("text-anchor", "middle")
-                    .style("fill", function (d, i) { return d >= maxValue / 2 ? 'white' : 'black'; })
-                    .text(function (d, i) {
-                        if (d > 0) { return d; }
-                        else {
-                            return 0
-                        }
-                    });
-            })
-            .on("mouseout", function () {
-                var t = d3.select(this)
-                setTimeout(function () {
-                    t.style("fill", colorMap);
-                    t.selectAll("text").remove()
-                }, 500);
-
+        .append("text")
+        .attr("dy", ".32em")
+        .attr("x", x.bandwidth() / 2)
+        .attr("y", y.bandwidth() / 2 - 4)
+        .attr("text-anchor", "middle")
+        .style("fill", function (d, i) { 
+            if(d >= 0.1 / 2)
+            {
+                return 'white'
+            }
+            else{
+                return 'black'
+            }})
+        .text(function (d, i) {
+            if (d > 0) { return d; }
+            else {return 0     }
             });
-    }
+        }
+    // if (highlightCellOnHover) {
+    //     row.selectAll(".cell")
+    //         .on("mouseover", function (d) {
+    //             d3.select(this).style("fill", highlightCellColor);
+    //             d3.select(this)
+    //                 .append("text")
+    //                 .attr("dy", ".32em")
+    //                 .attr("x", x.bandwidth() / 2)
+    //                 .attr("y", y.bandwidth() / 2 - 4)
+    //                 .attr("text-anchor", "middle")
+    //                 .style("fill", function (d, i) { return d >= maxValue / 2 ? 'white' : 'black'; })
+    //                 .text(function (d, i) {
+    //                     if (d > 0) { return d; }
+    //                     else {
+    //                         return 0
+    //                     }
+    //                 });
+    //         })
+            // .on("mouseout", function () {
+            //     var t = d3.select(this)
+            //     setTimeout(function () {
+            //         t.style("fill", colorMap);
+            //         t.selectAll("text").remove()
+            //     }, 500);
+            // });
+    // }
 
     var labels = svg.append('g')
         .attr('class', "labels");

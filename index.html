@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-
 
 <head>
     <meta charset="UTF-8">
@@ -13,49 +11,21 @@
 </head>
 
 <body>
-    <div class="Navbars">
-        <!-- <div class="Navbar" id="Meau">
-            <a href="#" class="nav" onclick="set()">Meau</a>
-        </div> -->
-        <div class="Navbar">
-            <a href="#" class="nav" onclick=compile() id="Compile">Compile</a>
+    <div class="Navigation_Bars">
+        <div class="Navigation_Bar">
+            <a href="#" class="Navigation_Element" id="importJSON">Load</a>
         </div>
-        <div class="Navbar">
-            <a href="#" class="nav" id="About">About</a>
+        <div class="Navigation_Bar">
+            <a href="#" class="Navigation_Element" id="exportJSON">Save</a>
+        </div>
+        <div class="Navigation_Bar">
+            <a href="#" class="Navigation_Element" onclick=compile() id="Compile">Compile</a>
+        </div>
+        <div class="Navigation_Bar">
+            <a href="https://github.com/ElonDormancy/QuantumSimulator" class="Navigation_Element" id="About">About</a>
         </div>
 
     </div>
-    </div>
-    <div id="content">
-        <div id="write" class=" first-line-indent" style="text-align: left">
-            <h1 id="title" style="text-align: center"><span>Quantum Simulator</span></h1>
-            <a style="text-align: center"
-                href="https://catonmat.net/ftp/simulating-physics-with-computers-richard-feynman.pdf">Simulating Physics
-                with Computers -
-                Richard P. Feynman </a>
-            <h2 id="introduction"><span>Introduction</span></h1>
-                <p><span>The Page is able to drag and drop to plot the quantum circuit and calculate the state evolution
-                        with the gate operator.</span></p>
-                <p><span>The circuit you drag to plot will display below the area where you drag.</span></p>
-                <p><span>The final state after applying the operators will display below the area where the plot
-                        shows.</span></p>
-                <p><span>If you want to calculate the more qubits like more than 30,Recommand you to click
-                    </span>[<a href="https://github.com/ElonDormancy/QuantumSimulator">here</a>]to get the parallel
-                    version[C++].</span></p>
-                <p><span>Welcome to Fork and Star !</span></p>
-                <h2 id="manual"><span>Manual</span></h2>
-                <p><span>1.Input the </span><strong><span>rows</span></strong><span> and
-                    </span><strong><span>cols</span></strong><span> where decide the size of your circuit</span></p>
-                <p><span>2.Drag and Drop the gate or control gate into the canvnas[Gate continuously loading and
-                        wait]</span></p>
-                <h2 id="attention"><span>Attention</span></h2>
-                <p><span>1.You can't replace a single part of the control gate.</span></p>
-                <p><span>2.Because of the limitation of the Javascript single thread the program provide the operator
-                        evolution below the number of qubit less than 6.[If want to get the result with the number of
-                        qubits
-                        more than 6;Click the compile to get]</span></p>
-                <p><span>3.You must input the n of Rx to generate the Control Rx Gate and drag to plot.</span></p>
-        </div>
     </div>
     <div class="init">
         <input type="text" min="0" class="input" value="Rows" id="rowsinput" />
@@ -75,9 +45,9 @@
         <button class="delete" id="deleterow" onclick="deleterow()">DeleteRow</button>
         <button class="delete" id="deletecol" onclick="deletecol()">DeleteCol</button>
     </div>
-    <div class="gatesets">
-        <div class="singlegate">
-            <div class="gate_name" style="margin-left: 4px;margin-top: 10px;margin-bottom: 4px;">Singale Gate</div>
+    <div class="Gate_Sets">
+        <div class="Single_Gates">
+            <div class="Gate_Name" style="margin-left: 4px;margin-top: 10px;margin-bottom: 4px;">Single Gate</div>
             <div class="gate X">
                 <div class="draggable" draggable="true" id="X" data-control="false"></div>
             </div>
@@ -96,55 +66,59 @@
             <div class="gate T">
                 <div class="draggable" draggable="true" id="T" data-control="false"></div>
             </div>
+            <div class="rubbish">
+            </div>
         </div>
-        <div class="controlgate">
-            <div class="ctrlgatenav">
-                <div class="gate_name" style="margin-bottom: 4px;margin-left: 34px;">CNOT</div>
-            <div class="ctrlgate" id="cnot">
-                <div class="gate ctrl">
-                    <div class="draggable" draggable="true" id="ctrl" data-control="true"></div>
-                </div>
-                <div class="gate X">
-                    <div class="draggable" draggable="true" data-c="controlgate" id="CtrlX" data-control="true"></div>
+        <div class="Control_Gates">
+            <div class="Ctrlgate_Navigation">
+                <div class="Gate_Name" style="margin-bottom: 4px;margin-left: 34px;">CNOT</div>
+                <div class="ctrlgate" id="cnot">
+                    <div class="gate ctrl">
+                        <div class="draggable" draggable="true" id="ctrl" data-control="true" data-order="0"></div>
+                    </div>
+                    <div class="gate X">
+                        <div class="draggable" draggable="true" data-c="controlgate" id="CtrlX" data-control="true"
+                            data-order="0"></div>
+                    </div>
                 </div>
             </div>
-            </div>
-            <div class="ctrlgatenav nav_rest">
-                <div class="gate_name"><span >CR</span> <span id="nav_input">n=<input type="text" id="Rtheta"></span></div>
-            <div class="ctrlgate" id="crx">
-                <div class="gate ctrl">
-                    <div class="draggable" draggable="false" id="ctrl" data-control="true"></div>
+            <div class="Ctrlgate_Navigation Rest_Navigation">
+                <div class="Gate_Name"><span>CR</span> <span id="nav_input">n=<input type="text" id="Rtheta"></span>
                 </div>
-                <div class="gate rx">
-                    <div class="draggable" draggable="false" data-c="controlgate" id="CtrlRx" data-control="true">
+                <div class="ctrlgate" id="crx">
+                    <div class="gate ctrl">
+                        <div class="draggable" draggable="false" id="ctrl" data-control="true" data-order="1"></div>
+                    </div>
+                    <div class="gate rx">
+                        <div class="draggable" draggable="false" data-c="controlgate" id="CtrlRx" data-control="true"
+                            data-order="1">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
     </div>
     </div>
     <h2>Input</h2>
-    <div id="dragplot">
-        <div id="DrawArea">
-            <div class="rows">
-                <div class="cols">
-                </div>
+    <div id="New_Area">
+        <div id="Dragable_Area">
+            <div class="cols">
             </div>
         </div>
-        <div id="qvizarea">
-            <div id='qvizdraw'></div>
-        </div>
+    </div>
+    <div id="qvizarea">
+        <div id='qvizdraw'></div>
+    </div>
     </div>
     <h2>Output</h2>
     <div id="result_display">
-        <div class="result" id="DM">
-            <h3>Density Matrix:</h3>
+        <div class="result" id="Density_Matrix">
+            <div class="title"><span>Density Matrix:</span> <button id="View_Result">View Result</button></div>
             <div id="Matrix"></div>
         </div>
         <div class="result" id="Histogram">
-            <h3>Projection Probability:</h3>
-            <div id="display"></div>
+            <div class="title">Projection Probability:</div>
+            <div id="histogram"></div>
         </div>
     </div>
 
@@ -165,11 +139,11 @@
 <script src="./operator.js"></script>
 <script src="./init_data.js"></script>
 <script src="./DensityMatrix.js"></script>
-<script src="./HistogramDisplay.js"></script>
+<script src="./Histogram.js"></script>
 <script src="./script.js"></script>
 <script src="./example.js"></script>
-<script src="./navbar.js"></script>
-
+<script src="./muti_drag_selection.js"></script>
+<script src="./JSON_port.js"></script>
 
 
 </html>
