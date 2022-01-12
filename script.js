@@ -321,7 +321,7 @@ function deletecol() {
     }
     var temps = document.getElementsByClassName("cols")
     for (var i = 0; i < temps.length; i++) {
-        var temp = temps[i].querySelectorAll(".droppable")
+        var temp = temps[i].querySelectorAll(".row")
         var len = temp.length
         temp[len - 1].remove()
     }

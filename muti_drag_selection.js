@@ -445,6 +445,9 @@ function package_ac() {
             compile()
             var draggables = document.querySelectorAll(".draggable")
             draggableL(draggables)
+            setTimeout(() => {
+                delete_single_ctrl_gate()
+            }, 0);
         }
         else {
             addcol()
@@ -472,6 +475,9 @@ function package_dc() {
         compile()
         var draggables = document.querySelectorAll(".draggable")
         draggableL(draggables)
+        setTimeout(() => {
+            delete_single_ctrl_gate()
+        }, 0);
     }, 0);
 
 }
@@ -488,6 +494,9 @@ function package_dr() {
         compile()
         var draggables = document.querySelectorAll(".draggable")
         draggableL(draggables)
+        setTimeout(() => {
+            delete_single_ctrl_gate()
+        }, 0);
     }, 0);
 }
 

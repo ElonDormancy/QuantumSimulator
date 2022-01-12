@@ -333,7 +333,7 @@ p {
     right: 0;
     bottom: 0;
     opacity: 0;
-    background-color: green;
+    background-image: url('./images/move_right.svg');
     z-index: 50;
 }
 
@@ -346,7 +346,7 @@ p {
     right: 0;
     left: 0;
     opacity: 0;
-    background-color: yellow;
+    background-image: url('./images/move_down.svg');
     z-index: 50;
 }
 
@@ -359,7 +359,7 @@ p {
     left: 0;
     right: 0;
     opacity: 0;
-    background-color: red;
+    background-image: url('./images/move_up.svg');
     z-index: 50;
 }
 
@@ -372,7 +372,7 @@ p {
     left: 0;
     bottom: 0;
     opacity: 0;
-    background-color: blue;
+    background-image: url('./images/move_left.svg');
     z-index: 50;
 }
 
