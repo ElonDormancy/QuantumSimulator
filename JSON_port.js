@@ -5,14 +5,16 @@ document.querySelector('#exportJSON').onclick = function (evt) {
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = 'gate_sets.json';
+    a.download = 'content.json';
     a.click();
 };
 
 function export_qcinfor(qcinfor) {
+    var qubits_ls = init_qubits()
     var sgs = qcinfor["sg"]
     var cgs = qcinfor["cg"]
     var normalized_infor = {
+        init_qubits: qubits_ls,
         single_gate_sets: {},
         control_gate_sets: {}
     }
@@ -107,6 +109,12 @@ function render_init(qcinfor) {
 
 function qcinfor_render(qcinfor) {
     render_init(qcinfor)
+    var init_qubits = qcinfor["init_qubits"]
+    var qubits = document.querySelectorAll(".qubit")
+    for (var i = 0; i < qubits.length; i++) {
+        qubits[i].setAttribute("data-index", init_qubits[i])
+        qubits[i].setAttribute("src", "./images/ket" + init_qubits[i] + ".svg")
+    }
     var gate = new GateSet()
     var sgs = qcinfor["single_gate_sets"]
     var cgs = qcinfor["control_gate_sets"]

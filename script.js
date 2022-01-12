@@ -570,7 +570,7 @@ function dragDrop(e) {
 
 // ----------------Draw The Quantum Circuit with Qviz--------------
 // ----------------------------------------------------------------
-function qviz_reverse() {
+function init_qubits() {
     var qubits_ls = []
     var qubits = document.querySelectorAll(".qubit")
     for (var qubit of qubits) {
@@ -588,7 +588,7 @@ function drawQC() {
         var sampleDiv = document.getElementById('qvizdraw');
         qviz.draw(qvizdraw, sampleDiv, qviz.STYLES['Default']);
     }
-    var qubits_ls = qviz_reverse()
+    var qubits_ls = init_qubits()
     var rows = qubits_ls.length
     var temp = document.querySelectorAll("#qvizdraw> svg >text")
     for (var i = 0; i < rows; i++) {
