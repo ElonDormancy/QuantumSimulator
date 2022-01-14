@@ -76,10 +76,10 @@ function render_init(qcinfor) {
     for (sg of sgs) {
         var sg_cols = sg["cols"]
         var sg_rows = sg["rows"]
-        if (sg_cols > maxcols) {
+        if (parseInt(sg_cols) > parseInt(maxcols)) {
             maxcols = sg_cols
         }
-        if (sg_rows > maxrows) {
+        if (parseInt(sg_rows) > parseInt(maxrows)) {
             maxrows = sg_rows
         }
     }
@@ -90,19 +90,21 @@ function render_init(qcinfor) {
         var ctrl_rows = ctrl["rows"]
         var ctrlgate_cols = ctrlgate["cols"]
         var ctrlgate_rows = ctrlgate["rows"]
-        if (ctrl_cols > maxcols) {
+        if (parseInt(ctrl_cols) > parseInt(maxcols)) {
             maxcols = ctrl_cols
         }
-        if (ctrlgate_cols > maxcols) {
+        if (parseInt(ctrlgate_cols) >= parseInt(maxcols)) {
             maxcols = ctrlgate_cols
         }
-        if (ctrl_rows > maxrows) {
+        if (parseInt(ctrl_rows) > parseInt(maxrows)) {
             maxrows = ctrl_rows
         }
-        if (ctrlgate_rows > maxrows) {
+        if (parseInt(ctrlgate_rows) > parseInt(maxrows)) {
             maxrows = ctrlgate_rows
         }
     }
+    console.log(parseInt(maxrows) + 1)
+    console.log(parseInt(maxcols) + 1)
     Initialize(parseInt(maxrows) + 1, parseInt(maxcols) + 1)
 }
 
