@@ -103,8 +103,6 @@ function render_init(qcinfor) {
             maxrows = ctrlgate_rows
         }
     }
-    console.log(parseInt(maxrows) + 1)
-    console.log(parseInt(maxcols) + 1)
     Initialize(parseInt(maxrows) + 1, parseInt(maxcols) + 1)
 }
 

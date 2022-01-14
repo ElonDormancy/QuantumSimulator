@@ -27,6 +27,27 @@
 //draggablesvar
 //qubits
 //------
+// const state = {
+//     timeline: [],
+//     current: 0,
+//     limit: 20,
+// };
+
+// document.onkeydown = function (event) {
+//     if (event.keyCode == 90 && event.ctrlKey) {
+//         Undo()
+//     }
+// }
+
+// function UpdateState(qcinfor) {
+//     if (state.current > state.limit) {
+//         state.timeline = []
+//     }
+//     else {
+//         state.timeline.push(qcinfor)
+//         state.current += 1
+//     }
+// }
 
 var qvizdraw = {
     qubits: [],
@@ -376,6 +397,11 @@ function RubbishDrop(e) {
     this.className = "rubbish"
     var dragitem = document.querySelector(".dragging")
     dragitem.remove()
+    var gate_class = dragitem.getAttribute("id")
+    var gate_container = document.querySelector("." + gate_class)
+    var copy = dragitem.cloneNode(true);
+    copy.className = "draggable"
+    gate_container.appendChild(copy)
 }
 
 
@@ -563,6 +589,7 @@ function dragDrop(e) {
         totoaldrawqc(totoalqcinfor())
         UpdateData()
         Init_algorithm()
+        // UpdateState(totoalqcinfor())
     }, 0);
 
 }
