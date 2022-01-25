@@ -77,7 +77,7 @@
                     <div class="gate ctrl">
                         <div class="draggable" draggable="true" id="ctrl" data-control="true" data-order="0"></div>
                     </div>
-                    <div class="gate X">
+                    <div class="gate CtrlX">
                         <div class="draggable" draggable="true" data-c="controlgate" id="CtrlX" data-control="true"
                             data-order="0"></div>
                     </div>
@@ -90,7 +90,7 @@
                     <div class="gate ctrl">
                         <div class="draggable" draggable="false" id="ctrl" data-control="true" data-order="1"></div>
                     </div>
-                    <div class="gate rx">
+                    <div class="gate CtrlRx">
                         <div class="draggable" draggable="false" data-c="controlgate" id="CtrlRx" data-control="true"
                             data-order="1">
                         </div>
@@ -100,7 +100,11 @@
         </div>
     </div>
     </div>
-    <h2>Input</h2>
+    <div>
+        <div class="h2" style="display: inline-block;">Input</div>
+        <div id="withdraw"></div>
+    </div>
+
     <div id="New_Area">
         <div id="Dragable_Area">
             <div class="cols">
@@ -111,7 +115,7 @@
         <div id='qvizdraw'></div>
     </div>
     </div>
-    <h2>Output</h2>
+    <div class="h2">Output</div>
     <div id="result_display">
         <div class="result" id="Density_Matrix">
             <div class="title"><span>Density Matrix:</span> <button id="View_Result">View Result</button></div>
@@ -145,6 +149,6 @@
 <script src="./example.js"></script>
 <script src="./muti_drag_selection.js"></script>
 <script src="./JSON_port.js"></script>
-
+<script src="./Undo.js"></script>
 
 </html>
