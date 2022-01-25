@@ -68,9 +68,7 @@ function export_qcinfor(qcinfor) {
     return normalized_infor
 }
 
-function render_init(qcinfor) {
-    var maxcols = 0
-    var maxrows = 0
+function render_init(qcinfor, maxcols, maxrows) {
     var sgs = qcinfor["single_gate_sets"]
     var cgs = qcinfor["control_gate_sets"]
     for (sg of sgs) {
@@ -107,8 +105,8 @@ function render_init(qcinfor) {
 }
 
 
-function qcinfor_render(qcinfor) {
-    render_init(qcinfor)
+function qcinfor_render(qcinfor, maxrows = 0, maxcols = 0) {
+    render_init(qcinfor, maxcols, maxrows)
     var init_qubits = qcinfor["init_qubits"]
     var qubits = document.querySelectorAll(".qubit")
     for (var i = 0; i < qubits.length; i++) {

@@ -170,6 +170,7 @@ function Execution_algorithm(obj) {
         draggableL(draggablesvar)
         totoaldrawqc(totoalqcinfor())
         UpdateData()
+        UpdateState(totoalqcinfor())
     }, 0);
 
 }

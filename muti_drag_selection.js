@@ -1,5 +1,3 @@
-
-
 //Drag and drop to draw a area to select gates
 document.onmousedown = function (event) {
     if (event.button == 0 && event.ctrlKey) {

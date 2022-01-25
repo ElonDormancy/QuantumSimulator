@@ -65,7 +65,7 @@ div {
     background-color: hotpink;
     height: 50px;
     width: 50px;
-    cursor: pointer;
+    cursor: grab;
 }
 
 
@@ -297,6 +297,26 @@ p {
 
 .Control_Gates {
     margin-top: 20px;
+}
+
+#withdraw:hover {
+    background-image: url('./images/withdraw_activate.svg');
+    cursor: pointer;
+}
+
+#withdraw {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-image: url('./images/withdraw.svg');
+}
+
+.h2 {
+
+    margin: 10px 0px;
+    font-size: 28px;
+    font-style: bold;
+    font-family: "Arial";
 }
 
 .title {
