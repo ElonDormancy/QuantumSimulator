@@ -62,7 +62,7 @@ div {
 
 .draggable {
     position: relative;
-    background-color: hotpink;
+    background-color: white;
     height: 50px;
     width: 50px;
     cursor: grab;
@@ -171,6 +171,10 @@ p {
     background-image: url('./images/Y.svg');
 }
 
+#Measure {
+    background-image: url("./images/Measure.svg");
+}
+
 #Z {
     background-image: url('./images/Z.svg');
 }
@@ -230,9 +234,26 @@ p {
     font-weight: bold
 }
 
+
+.fold_name {
+    width: 120px;
+    text-align: center;
+    height: 32px;
+    line-height: 32px;
+    background-color: rgb(212, 212, 212);
+    border-radius: 6px;
+}
+
+.fold_name:hover {
+    cursor: pointer;
+    background-color: rgb(105, 179, 162);
+}
+
 .Gate_Name {
     font-size: 20px;
     margin-left: 20px;
+    font-style: bold;
+    font-family: "Arial";
 }
 
 .init>button {
@@ -296,20 +317,9 @@ p {
 }
 
 .Control_Gates {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
-#withdraw:hover {
-    background-image: url('./images/withdraw_activate.svg');
-    cursor: pointer;
-}
-
-#withdraw {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    background-image: url('./images/withdraw.svg');
-}
 
 .h2 {
 
@@ -317,6 +327,10 @@ p {
     font-size: 28px;
     font-style: bold;
     font-family: "Arial";
+}
+
+#output {
+    margin-bottom: 20px;
 }
 
 .title {

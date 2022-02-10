@@ -27,22 +27,6 @@
 //draggablesvar
 //qubits
 //------
-const state = {
-    timeline: [],
-    current: 0,
-    limit: 20,
-};
-
-
-function UpdateState(qcinfor) {
-    if (state.current > state.limit) {
-        state.timeline = []
-    }
-    else {
-        state.timeline.push(qcinfor)
-        state.current += 1
-    }
-}
 
 var qvizdraw = {
     qubits: [],
@@ -82,6 +66,11 @@ const result_display = document.querySelector("#result_display")
 var droppablesvar = document.querySelectorAll('.droppable')
 var draggablesvar = document.querySelectorAll(".draggable")
 var qubits = document.querySelectorAll(".qubit")
+document.querySelector("#qvizarea").style.display = "none"
+var folders = document.querySelectorAll(".folder")
+for (var folder of folders) {
+    folder.style.display = "none"
+}
 document.querySelector("#addrow").disabled = true;
 document.querySelector("#addcol").disabled = true;
 document.querySelector("#deleterow").disabled = true;
@@ -157,6 +146,7 @@ btn.onclick = function () {
         var addcol = document.querySelector("#addcol")
         var deleterow = document.querySelector("#deleterow")
         var deletecol = document.querySelector("#deletecol")
+        document.querySelector("#qvizarea").style.display = "block"
         addrow.disabled = false
         addcol.disabled = false
         deleterow.disabled = false
@@ -193,7 +183,7 @@ function Initialize(rows, cols) {
     var temp = document.querySelector(".cols").innerHTML
     for (var i = 0; i < rows; i++) {
         arr2.push(`<div class="cols" data-rows = "${i}">` + `<img data-index="0" data-qindex="${i}" class="qubit" src="./images/ket0.svg" alt="\ket{0}" height="50px" width="50px" />` + temp.toString() + '</div>');
-        qvizdraw["qubits"].push({ id: i })
+        qvizdraw["qubits"].push({ id: i, numChildren: 1 })
     }
     document.querySelector('#Dragable_Area').innerHTML = arr2.join('');
     setTimeout(() => {
@@ -585,7 +575,6 @@ function dragDrop(e) {
         totoaldrawqc(totoalqcinfor())
         UpdateData()
         Init_algorithm()
-        UpdateState(totoalqcinfor())
     }, 0);
 
 }
@@ -607,6 +596,20 @@ function init_qubits() {
 
 //USE GLOBAL VAR
 function drawQC() {
+    var drag_area = document.querySelector("#Dragable_Area")
+    var Ms = drag_area.querySelectorAll("#Measure")
+    for (var M of Ms) {
+        var a = M.parentNode
+        var b = a.parentNode
+        var c = b.getAttribute("data-rows")
+        var temp = {
+            gate: 'Measure',
+            isMeasurement: true,
+            controls: [{ qId: parseInt(c) }],
+            targets: [{ type: 1, qId: parseInt(c), cId: 0 }],
+        }
+        qvizdraw["operations"].push(temp)
+    }
     if (typeof qviz != 'undefined') {
         var sampleDiv = document.getElementById('qvizdraw');
         qviz.draw(qvizdraw, sampleDiv, qviz.STYLES['Default']);
@@ -618,6 +621,7 @@ function drawQC() {
         if (qubits_ls[i] == "0") { temp[i].innerHTML = "|0⟩" }
         else { temp[i].innerHTML = "|1⟩" }
     }
+
 }
 
 function Get_Item_Information(item) {
@@ -642,7 +646,7 @@ function GetCoordinates(draggables) {
         var pcol = drag_item.parentNode;
         var x = pcol.getAttribute("data-cols");
         var arr = Get_Item_Information(drag_item)
-        if (x != null) {
+        if (x != null && (drag_item.id != "Measure")) {
             gateinformation.push(arr)
         }
     }

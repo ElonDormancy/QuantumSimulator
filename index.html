@@ -48,51 +48,63 @@
     </div>
     <div class="Gate_Sets">
         <div class="Single_Gates">
-            <div class="Gate_Name" style="margin-left: 4px;margin-top: 10px;margin-bottom: 4px;">Single Gate</div>
-            <div class="gate X">
-                <div class="draggable" draggable="true" id="X" data-control="false"></div>
+            <div data-open="false" class="Gate_Name fold_name"
+                style="margin-left: 4px;margin-top: 10px;margin-bottom: 4px;">Single Gate
             </div>
-            <div class="gate Y">
-                <div class="draggable" draggable="true" id="Y" data-control="false"></div>
-            </div>
-            <div class="gate Z">
-                <div class="draggable" draggable="true" id="Z" data-control="false"></div>
-            </div>
-            <div class="gate H">
-                <div class="draggable" draggable="true" id="H" data-control="false"></div>
-            </div>
-            <div class="gate S">
-                <div class="draggable" draggable="true" id="S" data-control="false"></div>
-            </div>
-            <div class="gate T">
-                <div class="draggable" draggable="true" id="T" data-control="false"></div>
-            </div>
-            <div class="rubbish">
+            <div class="folder">
+                <div class="gate X">
+                    <div class="draggable" draggable="true" id="X" data-control="false"></div>
+                </div>
+                <div class="gate Y">
+                    <div class="draggable" draggable="true" id="Y" data-control="false"></div>
+                </div>
+                <div class="gate Z">
+                    <div class="draggable" draggable="true" id="Z" data-control="false"></div>
+                </div>
+                <div class="gate H">
+                    <div class="draggable" draggable="true" id="H" data-control="false"></div>
+                </div>
+                <div class="gate S">
+                    <div class="draggable" draggable="true" id="S" data-control="false"></div>
+                </div>
+                <div class="gate T">
+                    <div class="draggable" draggable="true" id="T" data-control="false"></div>
+                </div>
+                <div class="gate Measure">
+                    <div class="draggable" draggable="true" id="Measure" data-control="false"></div>
+                </div>
+                <div class="rubbish">
+                </div>
             </div>
         </div>
         <div class="Control_Gates">
-            <div class="Ctrlgate_Navigation">
-                <div class="Gate_Name" style="margin-bottom: 4px;margin-left: 34px;">CNOT</div>
-                <div class="ctrlgate" id="cnot">
-                    <div class="gate ctrl">
-                        <div class="draggable" draggable="true" id="ctrl" data-control="true" data-order="0"></div>
-                    </div>
-                    <div class="gate CtrlX">
-                        <div class="draggable" draggable="true" data-c="controlgate" id="CtrlX" data-control="true"
-                            data-order="0"></div>
-                    </div>
-                </div>
+            <div class="Gate_Name fold_name" style="margin-left: 4px;margin-top: 10px;margin-bottom: 4px;"
+                data-open="false">Control Gate
             </div>
-            <div class="Ctrlgate_Navigation Rest_Navigation">
-                <div class="Gate_Name"><span>CR</span> <span id="nav_input">n=<input type="text" id="Rtheta"></span>
-                </div>
-                <div class="ctrlgate" id="crx">
-                    <div class="gate ctrl">
-                        <div class="draggable" draggable="false" id="ctrl" data-control="true" data-order="1"></div>
+            <div class="folder">
+                <div class="Ctrlgate_Navigation">
+                    <div class="Gate_Name" style="margin-bottom: 4px;margin-left: 34px;">CNOT</div>
+                    <div class="ctrlgate" id="cnot">
+                        <div class="gate ctrl">
+                            <div class="draggable" draggable="true" id="ctrl" data-control="true" data-order="0"></div>
+                        </div>
+                        <div class="gate CtrlX">
+                            <div class="draggable" draggable="true" data-c="controlgate" id="CtrlX" data-control="true"
+                                data-order="0"></div>
+                        </div>
                     </div>
-                    <div class="gate CtrlRx">
-                        <div class="draggable" draggable="false" data-c="controlgate" id="CtrlRx" data-control="true"
-                            data-order="1">
+                </div>
+                <div class="Ctrlgate_Navigation Rest_Navigation">
+                    <div class="Gate_Name"><span>CR</span> <span id="nav_input">n=<input type="text" id="Rtheta"></span>
+                    </div>
+                    <div class="ctrlgate" id="crx">
+                        <div class="gate ctrl">
+                            <div class="draggable" draggable="false" id="ctrl" data-control="true" data-order="1"></div>
+                        </div>
+                        <div class="gate CtrlRx">
+                            <div class="draggable" draggable="false" data-c="controlgate" id="CtrlRx"
+                                data-control="true" data-order="1">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,11 +112,15 @@
         </div>
     </div>
     </div>
-    <div>
-        <div class="h2" style="display: inline-block;">Input</div>
-        <div id="withdraw"></div>
+    <div class="noise_model">
+        <div class="Gate_Name fold_name" style="margin-left: 4px;margin-top: 10px;margin-bottom: 4px;"
+            data-open="false">Noise
+        </div>
+        <div class="folder"></div>
     </div>
-
+    <div>
+        <div class="h2">Input</div>
+    </div>
     <div id="New_Area">
         <div id="Dragable_Area">
             <div class="cols">
@@ -115,7 +131,7 @@
         <div id='qvizdraw'></div>
     </div>
     </div>
-    <div class="h2">Output</div>
+    <div class="h2" id="output">Output</div>
     <div id="result_display">
         <div class="result" id="Density_Matrix">
             <div class="title"><span>Density Matrix:</span> <button id="View_Result">View Result</button></div>
@@ -141,14 +157,14 @@
 </script>
 <script src="./libs/d3.min.js"></script>
 <script src="./libs/math.js"></script>
-<script src="./operator.js"></script>
-<script src="./init_data.js"></script>
-<script src="./DensityMatrix.js"></script>
-<script src="./Histogram.js"></script>
+<script src="./Folder.js"></script>
+<script src="./Operator.js"></script>
+<script src="./Initialization.js"></script>
+<script src="./libs/DensityMatrix.js"></script>
+<script src="./libs/ProjectionProb.js"></script>
 <script src="./script.js"></script>
 <script src="./example.js"></script>
-<script src="./muti_drag_selection.js"></script>
-<script src="./JSON_port.js"></script>
-<script src="./Undo.js"></script>
+<script src="./libs/GroupMode.js"></script>
+<script src="./JsonPort.js"></script>
 
 </html>
