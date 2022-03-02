@@ -70,7 +70,7 @@ var qubits = document.querySelectorAll(".qubit")
 document.querySelector("#qvizarea").style.display = "none"
 var folders = document.querySelectorAll(".folder")
 for (var folder of folders) {
-    folder.style.display = "none"
+    folder.style.display = "block"
 }
 function projector()
 {
@@ -96,7 +96,6 @@ function AddMeasureListener()
         m.addEventListener('click', projector)
     }
 }
-
 document.querySelector("#addrow").disabled = true;
 document.querySelector("#addcol").disabled = true;
 document.querySelector("#deleterow").disabled = true;

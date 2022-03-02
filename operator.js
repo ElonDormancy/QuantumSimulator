@@ -2,6 +2,9 @@
 //Nov 6 2021
 //Author Dormancy
 //------
+//Update Measure Operator
+//March 2 2022
+//------
 const pi = math.pi
 class SingleGateSets {
     constructor(n) {
@@ -51,15 +54,39 @@ class SingleGateSets {
         var ret = math.matrix([[i, 0], [0, u]])
         return ret
     }
+    Project(n){
+        if(n==0)
+        {
+            var ret =math.matrix([[1, 0], [0, 0]])
+        }
+        else
+        {
+            var ret =math.matrix([[0, 0], [0, 1]])
+        }
+        return ret
+    }
 }
 
 function SelectGate(Gate) {
     var GateSets = new SingleGateSets()
+    if(Gate.length > 7)
+    {
+        if(Gate.slice(7)=="true")
+        {
+            var str = "GateSets.Project(1)"
+        }
+        else
+        {
+            var str = "GateSets.Project(0)"
+        }
+    }
+    else{
     if (Gate.length > 1) {
         var str = "GateSets." + Gate[0] + `(${Gate[1]})`
     }
     else {
         var str = "GateSets." + Gate + "(0)"
+    }
     }
     var ret = eval(str)
     return ret
