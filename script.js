@@ -72,27 +72,22 @@ var folders = document.querySelectorAll(".folder")
 for (var folder of folders) {
     folder.style.display = "block"
 }
-function projector()
-{
-    if(this.getAttribute("data-control")=="false")
-    {
-        this.setAttribute("data-control","true")
+function projector() {
+    if (this.getAttribute("data-control") == "false") {
+        this.setAttribute("data-control", "true")
         this.style.background = "url(./images/Measure1.svg)";
     }
-    else
-    {
-        this.setAttribute("data-control","false")
+    else {
+        this.setAttribute("data-control", "false")
         this.style.background = "url(./images/Measure0.svg)";
     }
-     //Update result
+    //Update result
     UpdateData()
 }
 
-function AddMeasureListener()
-{
+function AddMeasureListener() {
     var ms = document.querySelectorAll('#measure');
-    for(var m of ms)
-    {
+    for (var m of ms) {
         m.addEventListener('click', projector)
     }
 }
@@ -314,7 +309,7 @@ function delete_single_ctrl_gate() {
     var tmp = []
     var draggables = document.querySelectorAll(".draggable")
     for (var dragging of draggables) {
-        if (dragging.getAttribute("data-control") == "true" && dragging.getAttribute("id")!="measure") {
+        if (dragging.getAttribute("data-control") == "true" && dragging.getAttribute("id") != "measure") {
             tmp.push(dragging.getAttribute("data-order"))
         }
     }
@@ -574,7 +569,7 @@ function dragDrop(e) {
     var gateClass = dragitem.getAttribute("id")
     var whether_cgate = dragitem.getAttribute("data-control")
     dragitem.className = "draggable"
-    if (whether_cgate == "true" && dragitem.getAttribute("id")!="measure") {
+    if (whether_cgate == "true" && dragitem.getAttribute("id") != "measure") {
         var cgs = document.querySelector("#cnot").querySelectorAll(".gate")
         var crx = document.querySelector("#crx").querySelectorAll(".gate")
         if (CheckContrlGate(cgs)) {
@@ -587,6 +582,12 @@ function dragDrop(e) {
             crx[0].innerHTML = `<div class="draggable" draggable="false" id="ctrl" data-control="true" data-order="${num_gates}"></div>`
             crx[1].innerHTML = `<div class="draggable" draggable="false" data-c="controlgate" id="CtrlRx" data-control="true" data-order="${num_gates}">`
         }
+    }
+    else if (dragitem.getAttribute("id") == "measure") {
+        var measure_element = '<div class="draggable" data-c = "m" draggable="true" id="measure" data-control="false"></div>'
+        var m = document.querySelector(".Single_Gates").querySelector("." + gateClass.toString())
+        m.innerHTML = measure_element
+        setTimeout(() => { delete_single_ctrl_gate() }, 0);
     }
     else {
         var sg = document.querySelector(".Single_Gates").querySelector("." + gateClass.toString())
@@ -639,7 +640,7 @@ function drawQC() {
 function Get_Item_Information(item) {
     var gate = item.getAttribute("id")
     var c = item.getAttribute("data-c")
-    if (gate.length > 4 && c!="m") {
+    if (gate.length > 4 && c != "m") {
         gate = gate.slice(4)
     }
     var pcol = item.parentNode;
@@ -725,8 +726,7 @@ function totoaldrawqc(qcinfor) {
                 temp["controls"] = [{ qId: gateinfor['ctrl']["yindex"] }]
                 qvizdraw["operations"].push(temp)
             }
-            if(gateclass == "measure")
-            {
+            if (gateclass == "measure") {
                 var temp = {
                     gate: '',
                     isMeasurement: true,
@@ -751,7 +751,7 @@ function totoalqcinfor() {
     {
         sg: {},
         cg: {},
-        measure:{},
+        measure: {},
     }
     var draggables = document.querySelectorAll(".draggable")
     var gateinformation = GetCoordinates(draggables)
@@ -760,13 +760,11 @@ function totoalqcinfor() {
     var ctrlgatescontainer = []
     var singlegatecontainer = []
     var measurecontainer = []
-    for(var e of gateinformation)
-    {
-        if(e["gateclass"] =="measure")
-        {
+    for (var e of gateinformation) {
+        if (e["gateclass"] == "measure") {
             var temp = {
-                gateclass:"measure",
-                gateinfor:e,
+                gateclass: "measure",
+                gateinfor: e,
             }
             measurecontainer.push(temp)
         }
