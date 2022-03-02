@@ -63,6 +63,7 @@ const getrows = document.getElementById("rowsinput")
 const getcols = document.getElementById("colsinput")
 const gatesets = document.querySelectorAll(".Gate_Sets")
 const result_display = document.querySelector("#result_display")
+
 var droppablesvar = document.querySelectorAll('.droppable')
 var draggablesvar = document.querySelectorAll(".draggable")
 var qubits = document.querySelectorAll(".qubit")
@@ -71,6 +72,31 @@ var folders = document.querySelectorAll(".folder")
 for (var folder of folders) {
     folder.style.display = "none"
 }
+function projector()
+{
+    if(this.getAttribute("data-control")=="false")
+    {
+        this.setAttribute("data-control","true")
+        this.style.background = "url(./images/Measure1.svg)";
+    }
+    else
+    {
+        this.setAttribute("data-control","false")
+        this.style.background = "url(./images/Measure0.svg)";
+    }
+     //Update result
+    UpdateData()
+}
+
+function AddMeasureListener()
+{
+    var ms = document.querySelectorAll('#measure');
+    for(var m of ms)
+    {
+        m.addEventListener('click', projector)
+    }
+}
+
 document.querySelector("#addrow").disabled = true;
 document.querySelector("#addcol").disabled = true;
 document.querySelector("#deleterow").disabled = true;
@@ -289,7 +315,7 @@ function delete_single_ctrl_gate() {
     var tmp = []
     var draggables = document.querySelectorAll(".draggable")
     for (var dragging of draggables) {
-        if (dragging.getAttribute("data-control") == "true") {
+        if (dragging.getAttribute("data-control") == "true" && dragging.getAttribute("id")!="measure") {
             tmp.push(dragging.getAttribute("data-order"))
         }
     }
@@ -549,7 +575,7 @@ function dragDrop(e) {
     var gateClass = dragitem.getAttribute("id")
     var whether_cgate = dragitem.getAttribute("data-control")
     dragitem.className = "draggable"
-    if (whether_cgate == "true") {
+    if (whether_cgate == "true" && dragitem.getAttribute("id")!="measure") {
         var cgs = document.querySelector("#cnot").querySelectorAll(".gate")
         var crx = document.querySelector("#crx").querySelectorAll(".gate")
         if (CheckContrlGate(cgs)) {
@@ -575,6 +601,7 @@ function dragDrop(e) {
         totoaldrawqc(totoalqcinfor())
         UpdateData()
         Init_algorithm()
+        AddMeasureListener()
     }, 0);
 
 }
@@ -596,20 +623,6 @@ function init_qubits() {
 
 //USE GLOBAL VAR
 function drawQC() {
-    var drag_area = document.querySelector("#Dragable_Area")
-    var Ms = drag_area.querySelectorAll("#Measure")
-    for (var M of Ms) {
-        var a = M.parentNode
-        var b = a.parentNode
-        var c = b.getAttribute("data-rows")
-        var temp = {
-            gate: 'Measure',
-            isMeasurement: true,
-            controls: [{ qId: parseInt(c) }],
-            targets: [{ type: 1, qId: parseInt(c), cId: 0 }],
-        }
-        qvizdraw["operations"].push(temp)
-    }
     if (typeof qviz != 'undefined') {
         var sampleDiv = document.getElementById('qvizdraw');
         qviz.draw(qvizdraw, sampleDiv, qviz.STYLES['Default']);
@@ -626,7 +639,8 @@ function drawQC() {
 
 function Get_Item_Information(item) {
     var gate = item.getAttribute("id")
-    if (gate.length > 4) {
+    var c = item.getAttribute("data-c")
+    if (gate.length > 4 && c!="m") {
         gate = gate.slice(4)
     }
     var pcol = item.parentNode;
@@ -646,7 +660,7 @@ function GetCoordinates(draggables) {
         var pcol = drag_item.parentNode;
         var x = pcol.getAttribute("data-cols");
         var arr = Get_Item_Information(drag_item)
-        if (x != null && (drag_item.id != "Measure")) {
+        if (x != null) {
             gateinformation.push(arr)
         }
     }
@@ -657,6 +671,7 @@ function GetCoordinates(draggables) {
 function totoaldrawqc(qcinfor) {
     var sgs = qcinfor["sg"]
     var cgs = qcinfor["cg"]
+    var ms = qcinfor["measure"]
     var inforcontainer = []
     qvizdraw["operations"] = []
     var cols = document.querySelector(".cols").childElementCount
@@ -669,6 +684,11 @@ function totoaldrawqc(qcinfor) {
         for (var j = 0; j < sgs.length; j++) {
             if (sgs[j]['gateinfor']["xindex"] == i.toString()) {
                 everycol.push(sgs[j])
+            }
+        }
+        for (var j = 0; j < ms.length; j++) {
+            if (ms[j]['gateinfor']["xindex"] == i.toString()) {
+                everycol.push(ms[j])
             }
         }
         for (var j = 0; j < cgs.length; j++) {
@@ -706,6 +726,20 @@ function totoaldrawqc(qcinfor) {
                 temp["controls"] = [{ qId: gateinfor['ctrl']["yindex"] }]
                 qvizdraw["operations"].push(temp)
             }
+            if(gateclass == "measure")
+            {
+                var temp = {
+                    gate: '',
+                    isMeasurement: true,
+                    controls: [],
+                    targets: [],
+                }
+                c = gateinfor["yindex"]
+                temp["gate"] = gateinfor["gateclass"]
+                temp["targets"] = [{ type: 1, qId: parseInt(c), cId: 0 }]
+                temp["controls"] = [{ qId: parseInt(c) }]
+                qvizdraw["operations"].push(temp)
+            }
         }
     }
     drawQC()
@@ -718,6 +752,7 @@ function totoalqcinfor() {
     {
         sg: {},
         cg: {},
+        measure:{},
     }
     var draggables = document.querySelectorAll(".draggable")
     var gateinformation = GetCoordinates(draggables)
@@ -725,8 +760,20 @@ function totoalqcinfor() {
     var ctrlgatesets = []
     var ctrlgatescontainer = []
     var singlegatecontainer = []
+    var measurecontainer = []
+    for(var e of gateinformation)
+    {
+        if(e["gateclass"] =="measure")
+        {
+            var temp = {
+                gateclass:"measure",
+                gateinfor:e,
+            }
+            measurecontainer.push(temp)
+        }
+    }
     for (var sgate of gateinformation) {
-        if (sgate['iscontrol'] == "false") {
+        if (sgate['iscontrol'] == "false" && sgate["gateclass"] != "measure") {
             var temp = {
                 gateclass: 'sg',
                 gateinfor: sgate,
@@ -761,6 +808,7 @@ function totoalqcinfor() {
     }
     gatecontainer['sg'] = singlegatecontainer
     gatecontainer['cg'] = ctrlgatescontainer
+    gatecontainer['measure'] = measurecontainer
     ctrlplace(ctrlgatescontainer)
     return gatecontainer
 }
@@ -825,8 +873,9 @@ function ProhibitedCol(col) {
 //Check what you are dragging whether has the matched ctrl gate in the same cols
 function CheckColCG(item) {
     var whether_cgate = item.getAttribute("data-control")
+    var whether_measure = item.getAttribute("id")
     var result = false
-    if (whether_cgate == "true") {
+    if (whether_cgate == "true" && whether_measure != "measure") {
         var item_parentNode = item.parentNode;
         var p_parentNode = item_parentNode.parentNode;
         var check_row = p_parentNode.getAttribute("data-rows")
@@ -856,7 +905,7 @@ function dragStart() {
     var this_col = col_temp.getAttribute("data-cols")
     var all_draggables = document.querySelectorAll(".draggable")
     var tmp = []
-    if (this.getAttribute("data-control") == "false") {
+    if (this.getAttribute("data-control") == "false" || this.getAttribute("id") == "measure") {
         var nos = document.querySelectorAll(".ctrlline")
         for (var no of nos) {
             no.className = "noplacement"

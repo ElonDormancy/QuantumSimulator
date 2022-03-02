@@ -8,6 +8,12 @@ class GateSet {
     HBlock = '<div class="draggable" draggable="true" id="H" data-control="false"></div>'
     SBlcok = '<div class="draggable" draggable="true" id="S" data-control="false"></div>'
     TBlcok = '<div class="draggable" draggable="true" id="T" data-control="false"></div>'
+    measure(project)
+    {
+        var MeasureBlock = '<div class="draggable" data-c = "m" draggable="true" id="measure" data-control='+project+'></div>'
+        return MeasureBlock
+    }
+    
     CtrlDot(order) {
         var CtrlDot = `<div class="draggable" draggable="true" id="ctrl" data-control="true" data-order="${order}"></div>`
         return CtrlDot
@@ -170,7 +176,6 @@ function Execution_algorithm(obj) {
         draggableL(draggablesvar)
         totoaldrawqc(totoalqcinfor())
         UpdateData()
-        UpdateState(totoalqcinfor())
     }, 0);
 
 }

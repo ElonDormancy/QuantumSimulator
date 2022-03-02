@@ -10,6 +10,7 @@ function GetApplyList() {
     }
     var sgs = totoalqcinfor()["sg"]
     var cgs = totoalqcinfor()["cg"]
+    var ms = totoalqcinfor()["measure"]
     for (var sgate of sgs) {
         var tmp = sgate["gateinfor"]["xindex"]
         applylist[tmp].push(sgate)
@@ -17,6 +18,10 @@ function GetApplyList() {
     for (var cgate of cgs) {
         var tmp = cgate["gateinfor"]["ctrl"]["xindex"]
         applylist[tmp].push(cgate)
+    }
+    for(var m of ms) {
+        var tmp = m["gateinfor"]["xindex"]
+        applylist[tmp].push(m)
     }
     return applylist
 }
@@ -91,7 +96,15 @@ function applygate(vec, applylist) {
     var vec_state = vec
     for (gates of applylist) {
         for (gate of gates) {
-            if (gate["gateclass"] == "sg") {
+            if(gate["gateclass"] == "measure")
+            {
+                var gateinformation = gate["gateinfor"]
+                var index = gateinformation["yindex"]
+                var measure_project = gateinformation["iscontrol"]
+                var gateclass = gateinformation["gateclass"]+measure_project
+                vec_state = sgo(vec_state, index, gateclass)            
+            }
+            else if (gate["gateclass"] == "sg") {
                 var gateinformation = gate["gateinfor"]
                 var index = gateinformation["yindex"]
                 var gateclass = gateinformation["gateclass"]

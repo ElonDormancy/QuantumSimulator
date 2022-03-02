@@ -13,14 +13,32 @@ function export_qcinfor(qcinfor) {
     var qubits_ls = init_qubits()
     var sgs = qcinfor["sg"]
     var cgs = qcinfor["cg"]
+    var measures = qcinfor["measure"]
     var normalized_infor = {
         init_qubits: qubits_ls,
         single_gate_sets: {},
-        control_gate_sets: {}
+        control_gate_sets: {},
+        measure_sets:{},
     }
     var ctrlgatesets = []
     var singlegatesets = []
-    for (sg of sgs) {
+    var measuresets = []
+    for (var m of measures)
+    {
+        var measure_operator = {
+            cols: 0,
+            rows: 0,
+            gateclass: 0,
+            project:"false"
+        }
+        var information = m["gateinfor"]
+        measure_operator["cols"] = information["xindex"]
+        measure_operator["rows"] = information["yindex"]
+        measure_operator["gateclass"] = information["gateclass"]
+        measure_operator["project"] = information["iscontrol"]
+        measuresets.push(measure_operator)
+    }
+    for (var sg of sgs) {
         var single_gate = {
             cols: 0,
             rows: 0,
@@ -32,7 +50,7 @@ function export_qcinfor(qcinfor) {
         single_gate["gateclass"] = information["gateclass"]
         singlegatesets.push(single_gate)
     }
-    for (cg of cgs) {
+    for (var cg of cgs) {
         var control_gate = {
             ctrl: {},
             ctrlgate: {},
@@ -65,13 +83,26 @@ function export_qcinfor(qcinfor) {
     }
     normalized_infor["single_gate_sets"] = singlegatesets
     normalized_infor["control_gate_sets"] = ctrlgatesets
+    normalized_infor["measure_sets"] = measuresets
     return normalized_infor
 }
 
 function render_init(qcinfor, maxcols, maxrows) {
     var sgs = qcinfor["single_gate_sets"]
     var cgs = qcinfor["control_gate_sets"]
-    for (sg of sgs) {
+    var ms = qcinfor["measure_sets"]
+    for (var m of ms)
+    {
+        var m_cols = m["cols"]
+        var m_rows = m["rows"]
+        if (parseInt(m_cols) > parseInt(maxcols)) {
+            maxcols = m_cols
+        }
+        if (parseInt(m_rows) > parseInt(maxrows)) {
+            maxrows = m_rows
+        }
+    }
+    for (var sg of sgs) {
         var sg_cols = sg["cols"]
         var sg_rows = sg["rows"]
         if (parseInt(sg_cols) > parseInt(maxcols)) {
@@ -81,7 +112,7 @@ function render_init(qcinfor, maxcols, maxrows) {
             maxrows = sg_rows
         }
     }
-    for (cg of cgs) {
+    for (var cg of cgs) {
         var ctrl = cg["ctrl"]
         var ctrlgate = cg["ctrlgate"]
         var ctrl_cols = ctrl["cols"]
@@ -116,13 +147,24 @@ function qcinfor_render(qcinfor, maxrows = 0, maxcols = 0) {
     var gate = new GateSet()
     var sgs = qcinfor["single_gate_sets"]
     var cgs = qcinfor["control_gate_sets"]
+    var ms = qcinfor["measure_sets"]
     var area = document.querySelector("#Dragable_Area")
     var droppables = area.querySelectorAll(".row")
     for (var drop of droppables) {
         var tmp = drop.parentNode
         var rows = tmp.getAttribute("data-rows")
         var cols = drop.getAttribute("data-cols")
-        for (sg of sgs) {
+        for (var m of ms)
+        {
+            var m_cols = m["cols"]
+            var m_rows = m["rows"]
+            if (m_cols == cols && m_rows == rows) {
+                var project = m["project"]
+                var element = "gate.measure("+project+")"
+                drop.innerHTML = eval(element)
+            }
+        }
+        for (var sg of sgs) {
             var sg_cols = sg["cols"]
             var sg_rows = sg["rows"]
             if (sg_cols == cols && sg_rows == rows) {
@@ -131,7 +173,7 @@ function qcinfor_render(qcinfor, maxrows = 0, maxcols = 0) {
                 drop.innerHTML = eval(element)
             }
         }
-        for (cg of cgs) {
+        for (var cg of cgs) {
             var ctrl = cg["ctrl"]
             var ctrlgate = cg["ctrlgate"]
             var order = cg["order"]
@@ -170,6 +212,7 @@ function qcinfor_render(qcinfor, maxrows = 0, maxcols = 0) {
     getcols.disabled = false
     getrows.disabled = false
     result_display.style.display = "block"
+    document.querySelector("#qvizarea").style.display = "block"
     circuit_example.disabled = false;
     setTimeout(() => {
         UpdateRGate()

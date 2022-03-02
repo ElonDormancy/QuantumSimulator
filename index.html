@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-    <title>Yi QCS</title>
+    <title>UQCS</title>
     <link rel="stylesheet" type="text/css" href="base.css" />
     <script src="./libs/quantum-viz.js"></script>
 </head>
@@ -31,7 +31,7 @@
     <div class="init">
         <input type="text" min="0" class="input" value="Rows" id="rowsinput" />
         <input type="text" min="0" class="input" value="Cols" id="colsinput" />
-        <button id="btn">Start/Restart</button>
+        <button id="btn">Start/Clear</button>
         <select name="example" onchange="Execution_algorithm(this)" id="example">
             <option>algorithm</option>
             <option value="Superposition">Superposition</option>
@@ -43,8 +43,8 @@
     <div class="init">
         <button class="add" id="addrow" onclick="addrow()">AddRow</button>
         <button class="add" id="addcol" onclick="addcol()">AddCol</button>
-        <button class="delete" id="deleterow" onclick="deleterow()">DeleteRow</button>
-        <button class="delete" id="deletecol" onclick="deletecol()">DeleteCol</button>
+        <button class="delete" id="deleterow" onclick="deleterow()">DelRow</button>
+        <button class="delete" id="deletecol" onclick="deletecol()">DelCol</button>
     </div>
     <div class="Gate_Sets">
         <div class="Single_Gates">
@@ -70,8 +70,8 @@
                 <div class="gate T">
                     <div class="draggable" draggable="true" id="T" data-control="false"></div>
                 </div>
-                <div class="gate Measure">
-                    <div class="draggable" draggable="true" id="Measure" data-control="false"></div>
+                <div class="gate measure">
+                    <div class="draggable" data-c = "m" draggable="true" id="measure" data-control="false"></div>
                 </div>
                 <div class="rubbish">
                 </div>
@@ -107,6 +107,7 @@
                             </div>
                         </div>
                     </div>
+                
                 </div>
             </div>
         </div>

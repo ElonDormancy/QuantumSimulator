@@ -17,10 +17,26 @@ div {
 }
 
 
+
+#btn{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 12px;
+}
+
+.add{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 12px;
+}
+
+.delete{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 12px;
+}
+
 .Navigation_Bars>a {
     text-decoration: none;
     color: black;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Georgia, 'Times New Roman', Times, serif;
     text-align: center;
 }
 
@@ -43,14 +59,14 @@ div {
 .Navigation_Element:hover {
     color: black;
     font-weight: 700;
-    font-family: arial;
+    font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 18px;
 }
 
 .Navigation_Bar>a {
     text-decoration: none;
     color: gray;
-    font-family: arial;
+    font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 18px;
 }
 
@@ -171,8 +187,8 @@ p {
     background-image: url('./images/Y.svg');
 }
 
-#Measure {
-    background-image: url("./images/Measure.svg");
+#measure {
+    background-image: url("./images/Measure0.svg");
 }
 
 #Z {
@@ -202,6 +218,11 @@ p {
 #CtrlRx {
     background-image: url('./images/Rx.svg');
 }
+
+#swap {
+    background-image: url('./images/SWAP.svg');
+}
+
 
 #New_Area {
     margin-top: 10px;
@@ -242,6 +263,7 @@ p {
     line-height: 32px;
     background-color: rgb(212, 212, 212);
     border-radius: 6px;
+    
 }
 
 .fold_name:hover {
@@ -253,7 +275,7 @@ p {
     font-size: 20px;
     margin-left: 20px;
     font-style: bold;
-    font-family: "Arial";
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 .init>button {
@@ -322,11 +344,10 @@ p {
 
 
 .h2 {
-
     margin: 10px 0px;
     font-size: 28px;
     font-style: bold;
-    font-family: "Arial";
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 #output {
