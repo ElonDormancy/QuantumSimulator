@@ -18,17 +18,17 @@ div {
 
 
 
-#btn{
+#btn {
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 12px;
 }
 
-.add{
+.add {
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 12px;
 }
 
-.delete{
+.delete {
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 12px;
 }
@@ -173,6 +173,15 @@ p {
     display: inline-block;
 }
 
+.noise {
+    height: 50px;
+    width: 50px;
+    margin: 2px;
+    border: 2px black solid;
+    background-color: white;
+    display: inline-block;
+}
+
 .drag-over {
     background-image: none;
     background-color: grey;
@@ -219,13 +228,36 @@ p {
     background-image: url('./images/Rx.svg');
 }
 
-#swap {
-    background-image: url('./images/SWAP.svg');
+#KrauZ {
+    background-image: url('./images/Kz.svg');
 }
 
+#KrauY {
+    background-image: url('./images/Ky.svg');
+}
+
+#KrauX {
+    background-image: url('./images/Kx.svg');
+}
 
 #New_Area {
     margin-top: 10px;
+}
+
+.noise_container {
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.p_input {
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-bottom: 2px solid black;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
 }
 
 #Rtheta {
@@ -247,12 +279,24 @@ p {
     display: inline-block;
 }
 
+.Noise_Navigation {
+    display: inline-block;
+}
+
+.noise_nav_input {
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
 #nav_input {
     margin-left: -5px;
     line-height: 20px;
     height: 20px;
     color: blue;
-    font-weight: bold
+    font-weight: bold;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 
@@ -263,7 +307,7 @@ p {
     line-height: 32px;
     background-color: rgb(212, 212, 212);
     border-radius: 6px;
-    
+
 }
 
 .fold_name:hover {

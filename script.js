@@ -106,7 +106,7 @@ gettheta.onblur = function () {
         this.value = ""
     }
     var n = Number(gettheta.value)
-    if (!isNaN(n) && n > 0) {
+    if (!isNaN(n) && n >= 0) {
         RthetaGate(n)
     }
 }
@@ -583,15 +583,21 @@ function dragDrop(e) {
             crx[1].innerHTML = `<div class="draggable" draggable="false" data-c="controlgate" id="CtrlRx" data-control="true" data-order="${num_gates}">`
         }
     }
-    else if (dragitem.getAttribute("id") == "measure") {
-        var measure_element = '<div class="draggable" data-c = "m" draggable="true" id="measure" data-control="false"></div>'
-        var m = document.querySelector(".Single_Gates").querySelector("." + gateClass.toString())
-        m.innerHTML = measure_element
-        setTimeout(() => { delete_single_ctrl_gate() }, 0);
-    }
     else {
-        var sg = document.querySelector(".Single_Gates").querySelector("." + gateClass.toString())
-        sg.innerHTML = (stringIze(dragitem))
+        if (dragitem.getAttribute("id") == "measure") {
+            var measure_element = '<div class="draggable" data-c = "m" draggable="true" id="measure" data-control="false"></div>'
+            var m = document.querySelector(".Single_Gates").querySelector("." + gateClass.toString())
+            m.innerHTML = measure_element
+        }
+        else if (dragitem.getAttribute("data-noise") == "true") {
+            var noise_class = gateClass.toString().slice(0, 5)
+            var noise_gate = document.querySelector(".noise_model").querySelector("." + noise_class)
+            noise_gate.innerHTML = `<div class="draggable" draggable="false" id=${noise_class} data-control="false" data-noise="true"></div>`
+        }
+        else {
+            var sg = document.querySelector(".Single_Gates").querySelector("." + gateClass.toString())
+            sg.innerHTML = (stringIze(dragitem))
+        }
         setTimeout(() => { delete_single_ctrl_gate() }, 0);
     }
     this.innerHTML = (stringIze(dragitem))
@@ -930,9 +936,39 @@ function dragStart() {
     }
 }
 
+function GenerateKrausBackground(noise_class, p) {
+    var ret = `<svg width="50" height="50" xmlns="http://www.w3.org/2000/svg"><g>
+     <rect id="svg_1" height="50" width="50" y="0.298507" x="0" stroke-width="5" stroke="#000" fill="#fff"/>
+     <text style="cursor: move;" xml:space="preserve" text-anchor="start" font-family="'Georgia'" font-size="24" id="svg_1" y="26.12903" x="11.27017" stroke-width="0" stroke="#000" fill="#000000">K${noise_class}</text>
+     <text style="cursor: move;" xml:space="preserve" text-anchor="start" font-family="'Times New Roman'" font-size="16" id="svg_2" y="44.19354" x="6" stroke-width="0" stroke="#000" fill="#000000">P=${p}</text>
+    </g>
+   </svg>`
+    return ret
+}
+
 function GenerateRxBackground(n) {
     var ret = `<svg width="50" height="50" xmlns="http://www.w3.org/2000/svg"><g><rect id="svg_1" height="50" width="50" y="0" x="0" stroke-width="3" stroke="#000" fill="#ccccd6"/><text style="cursor: move;" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_3" y="32.997583" x="10.33415" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">R</text><text style="cursor: move;" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="12" id="svg_3" y="32.997583" x="28" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">${n}</text></g></svg>`
     return ret
+}
+
+function SetKrausBg(c, p) {
+    var k = document.querySelector(`div.${c}> div`);
+    var encoded = window.btoa(GenerateKrausBackground(c.slice(4).toLowerCase(), p));
+    k.setAttribute("draggable", "true");
+    k.style.background = "url(data:image/svg+xml;base64," + encoded + ")";
+    k.id = c + `${p}`
+}
+
+function KrausX(p) {
+    SetKrausBg("KrauX", p)
+}
+
+function KrausY(p) {
+    SetKrausBg("KrauY", p)
+}
+
+function KrausZ(p) {
+    SetKrausBg("KrauZ", p)
 }
 
 
@@ -944,20 +980,24 @@ function RthetaGate(n) {
     rxgate.style.background = "url(data:image/svg+xml;base64," + encoded + ")";
     rxgate.id = `CtrlR${n}`
 }
+const krausX_Input = document.querySelector("#px")
+const krausY_Input = document.querySelector("#py")
+const krausZ_Input = document.querySelector("#pz")
+function noise_prob(ele, func) {
+    ele.onfocus = function () {
+        this.value = ""
+    };
+    ele.onblur = function () {
+        var p = Number(ele.value)
+        if (!isNaN(p) && p >= 0) {
+            eval(func + "(" + p.toString() + ")")
 
-
-function UpdateRGate() {
-    var CRS = document.querySelectorAll(".draggable")
-    for (var CR of CRS) {
-        var gateclass = CR.id.slice(0, 5)
-        if (gateclass == "CtrlR" && CR.id != "CtrlRx") {
-            var n = parseInt(CR.id.slice(5))
-            var encoded = window.btoa(GenerateRxBackground(n));
-            CR.style.background = "url(data:image/svg+xml;base64," + encoded + ")";
         }
     }
 }
-
+noise_prob(krausX_Input, "KrausX")
+noise_prob(krausY_Input, "KrausY")
+noise_prob(krausZ_Input, "KrausZ")
 
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

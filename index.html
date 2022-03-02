@@ -71,7 +71,7 @@
                     <div class="draggable" draggable="true" id="T" data-control="false"></div>
                 </div>
                 <div class="gate measure">
-                    <div class="draggable" data-c = "m" draggable="true" id="measure" data-control="false"></div>
+                    <div class="draggable" data-c="m" draggable="true" id="measure" data-control="false"></div>
                 </div>
                 <div class="rubbish">
                 </div>
@@ -107,7 +107,6 @@
                             </div>
                         </div>
                     </div>
-                
                 </div>
             </div>
         </div>
@@ -117,7 +116,29 @@
         <div class="Gate_Name fold_name" style="margin-left: 4px;margin-top: 10px;margin-bottom: 4px;"
             data-open="false">Noise
         </div>
-        <div class="folder"></div>
+        <div class="folder">
+            <div class="Noise_Navigation">
+                <div class="noise_nav_input">P=<input type="text" id="px"
+                        oninput="if(value>1)value=1;if(value<0)value=0" class="p_input"></div>
+                <div class="gate KrauX noise_container">
+                    <div class="draggable" draggable="false" id="KrauX" data-control="false" data-noise="true"></div>
+                </div>
+            </div>
+            <div class="Noise_Navigation">
+                <div class="noise_nav_input">P=<input type="text" id="py"
+                        oninput="if(value>1)value=1;if(value<0)value=0" class="p_input"></div>
+                <div class="gate KrauY noise_container">
+                    <div class="draggable" draggable="true" id="KrauY" data-control="false" data-noise="true"></div>
+                </div>
+            </div>
+            <div class="Noise_Navigation">
+                <div class="noise_nav_input">P=<input type="text" id="pz"
+                        oninput="if(value>1)value=1;if(value<0)value=0" class="p_input"></div>
+                <div class="gate KrauZ noise_container">
+                    <div class="draggable" draggable="true" id="KrauZ" data-control="false" data-noise="true"></div>
+                </div>
+            </div>
+        </div>
     </div>
     <div>
         <div class="h2">Input</div>
