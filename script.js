@@ -278,7 +278,7 @@ function addrow() {
     document.querySelector("#Dragable_Area").append(o)
     var qubits = qvizdraw["qubits"]
     var index = qubits[qubits.length - 1]["id"]
-    qvizdraw["qubits"].push({ id: index + 1 })
+    qvizdraw["qubits"].push({ id: index + 1, numChildren: 1 })
     setTimeout(() => {
         //Init the algorithm
         Init_algorithm()
