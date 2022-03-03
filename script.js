@@ -642,11 +642,27 @@ function drawQC() {
     }
 
 }
+function noise_name_transform(gate) {
+    if (gate.slice(0, 5) == "KrauX") {
+        return "Bit_Filp" + "(" + gate.slice(5) + ")"
+    }
+    else if (gate.slice(0, 5) == "KrauZ") {
+        return "Phase_Filp" + "(" + gate.slice(5) + ")"
+    }
+    else if (gate.slice(0, 5) == "KrauY") {
+        return "Bit_Phase_Filp" + "(" + gate.slice(5) + ")"
+    }
+    else {
+        return gate
+    }
+}
+
 
 function Get_Item_Information(item) {
-    var gate = item.getAttribute("id")
+    var gate = noise_name_transform(item.getAttribute("id"))
     var c = item.getAttribute("data-c")
-    if (gate.length > 4 && c != "m") {
+    var w_noise = item.getAttribute("data-noise")
+    if (gate.length > 4 && c != "m" && w_noise != "true") {
         gate = gate.slice(4)
     }
     var pcol = item.parentNode;

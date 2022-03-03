@@ -48,7 +48,7 @@
     </div>
     <div class="Gate_Sets">
         <div class="Single_Gates">
-            <div data-open="false" class="Gate_Name fold_name"
+            <div data-open="true" class="Gate_Name fold_name"
                 style="margin-left: 4px;margin-top: 10px;margin-bottom: 4px;">Single Gate
             </div>
             <div class="folder">
@@ -79,7 +79,7 @@
         </div>
         <div class="Control_Gates">
             <div class="Gate_Name fold_name" style="margin-left: 4px;margin-top: 10px;margin-bottom: 4px;"
-                data-open="false">Control Gate
+                data-open="true">Control Gate
             </div>
             <div class="folder">
                 <div class="Ctrlgate_Navigation">
@@ -113,8 +113,8 @@
     </div>
     </div>
     <div class="noise_model">
-        <div class="Gate_Name fold_name" style="margin-left: 4px;margin-top: 10px;margin-bottom: 4px;"
-            data-open="false">Noise
+        <div class="Gate_Name fold_name" style="margin-left: 4px;margin-top: 10px;margin-bottom: 4px;" data-open="true">
+            Noise
         </div>
         <div class="folder">
             <div class="Noise_Navigation">
@@ -128,14 +128,14 @@
                 <div class="noise_nav_input">P=<input type="text" id="py"
                         oninput="if(value>1)value=1;if(value<0)value=0" class="p_input"></div>
                 <div class="gate KrauY noise_container">
-                    <div class="draggable" draggable="true" id="KrauY" data-control="false" data-noise="true"></div>
+                    <div class="draggable" draggable="false" id="KrauY" data-control="false" data-noise="true"></div>
                 </div>
             </div>
             <div class="Noise_Navigation">
                 <div class="noise_nav_input">P=<input type="text" id="pz"
                         oninput="if(value>1)value=1;if(value<0)value=0" class="p_input"></div>
                 <div class="gate KrauZ noise_container">
-                    <div class="draggable" draggable="true" id="KrauZ" data-control="false" data-noise="true"></div>
+                    <div class="draggable" draggable="false" id="KrauZ" data-control="false" data-noise="true"></div>
                 </div>
             </div>
         </div>
