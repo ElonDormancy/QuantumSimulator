@@ -9,6 +9,7 @@ const pi = math.pi
 class SingleGateSets {
     constructor(n) {
         this.n = n;
+        this.p = n;
     }
 
     X() {
@@ -54,39 +55,64 @@ class SingleGateSets {
         var ret = math.matrix([[i, 0], [0, u]])
         return ret
     }
-    Project(n){
-        if(n==0)
-        {
-            var ret =math.matrix([[1, 0], [0, 0]])
+    Project(n) {
+        if (n == 0) {
+            var ret = math.matrix([[1, 0], [0, 0]])
         }
-        else
-        {
-            var ret =math.matrix([[0, 0], [0, 1]])
+        else {
+            var ret = math.matrix([[0, 0], [0, 1]])
         }
+        return ret
+    }
+    KrausX_Operator(p) {
+        var ret = math.matrix([[p, 1 - p], [1 - p, p]])
+        return ret
+    }
+    KrausY_Operator(p) {
+        var Y = 1 - p
+        var j = math.complex(0, 1)
+        var jm = math.multiply(j, -1)
+        var ret = math.matrix([[p, math.multiply(jm, Y)], [math.multiply(j, Y), p]])
+        return ret
+    }
+    KrausZ_Operator(p) {
+        var ret = math.matrix([[1, 0], [0, 2 * p - 1]])
         return ret
     }
 }
 
 function SelectGate(Gate) {
     var GateSets = new SingleGateSets()
-    if(Gate.length > 7)
-    {
-        if(Gate.slice(7)=="true")
-        {
-            var str = "GateSets.Project(1)"
+    if (Gate.length > 7) {
+        if (Gate.slice(0, 7) == "measure") {
+            if (Gate.slice(7) == "true") {
+                var str = "GateSets.Project(1)"
+            }
+            else {
+                var str = "GateSets.Project(0)"
+            }
         }
-        else
-        {
-            var str = "GateSets.Project(0)"
+        else if (Gate.slice(4, 8) == "Filp") {
+            var p = Gate.slice(8)
+            var str = "GateSets.KrausX_Operator" + p
         }
-    }
-    else{
-    if (Gate.length > 1) {
-        var str = "GateSets." + Gate[0] + `(${Gate[1]})`
+        else if (Gate.slice(6, 10) == "Filp") {
+            var p = Gate.slice(10)
+            var str = "GateSets.KrausZ_Operator" + p
+        }
+        else if (Gate.slice(10, 14) == "Filp") {
+            var p = Gate.slice(14)
+            var str = "GateSets.KrausY_Operator" + p
+        }
+
     }
     else {
-        var str = "GateSets." + Gate + "(0)"
-    }
+        if (Gate.length > 1) {
+            var str = "GateSets." + Gate[0] + `(${Gate[1]})`
+        }
+        else {
+            var str = "GateSets." + Gate + "(0)"
+        }
     }
     var ret = eval(str)
     return ret
