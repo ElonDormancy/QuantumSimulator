@@ -9,6 +9,18 @@ document.querySelector('#exportJSON').onclick = function (evt) {
     a.click();
 };
 
+
+document.querySelector('#exportJSON_applylist').onclick = function (evt) {
+    evt.preventDefault();
+    var out = GetApplyList()
+    var blob = new Blob([JSON.stringify(out)]);
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'applylist.json';
+    a.click();
+};
+
 function export_qcinfor(qcinfor) {
     var qubits_ls = init_qubits()
     var sgs = qcinfor["sg"]
