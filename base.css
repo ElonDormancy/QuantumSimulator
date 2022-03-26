@@ -1,3 +1,9 @@
+.noise_model {
+    display: none;
+}
+
+/* No Noise */
+
 .Navigation_Bars {
     width: 1000px;
     height: 60px;
