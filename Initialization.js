@@ -23,7 +23,6 @@ function GetApplyList() {
         var tmp = m["gateinfor"]["xindex"]
         applylist[tmp].push(m)
     }
-    console.log(applylist)
     return applylist
 }
 
