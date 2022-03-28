@@ -191,3 +191,4 @@ function cgo(vec_state, ctrl, targ, gate) {
     }
     return vec_state
 }
+
