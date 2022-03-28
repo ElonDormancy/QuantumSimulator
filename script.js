@@ -12,9 +12,13 @@
 //------
 //Jan 7 2022
 //Fix the bug
-//1.No placement two cnot gate in the one cols
+//1.No placement two cnot gate in the one circuit_depth
 //And change the view perspective of the result
 //Add notes
+//------
+//March 28 2022
+//Change the name of var
+//------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
@@ -59,11 +63,11 @@ const qubit_number = 6
 var num_gates = 2
 const circuit_example = document.getElementById("example")
 const gettheta = document.getElementById("Rtheta")
-const getrows = document.getElementById("rowsinput")
-const getcols = document.getElementById("colsinput")
+const getqubit_indexs = document.getElementById("qubit_indexsinput")
+const getcircuit_depth = document.getElementById("circuit_depthinput")
 const gatesets = document.querySelectorAll(".Gate_Sets")
 const result_display = document.querySelector("#result_display")
-
+const save_images = document.querySelector("#save_img_button")
 var droppablesvar = document.querySelectorAll('.droppable')
 var draggablesvar = document.querySelectorAll(".draggable")
 var qubits = document.querySelectorAll(".qubit")
@@ -91,13 +95,14 @@ function AddMeasureListener() {
         m.addEventListener('click', projector)
     }
 }
-document.querySelector("#addrow").disabled = true;
-document.querySelector("#addcol").disabled = true;
-document.querySelector("#deleterow").disabled = true;
-document.querySelector("#deletecol").disabled = true;
+document.querySelector("#addqubit_index").disabled = true;
+document.querySelector("#addcircuit_depth").disabled = true;
+document.querySelector("#deletequbit_index").disabled = true;
+document.querySelector("#deletecircuit_depth").disabled = true;
+save_images.style.display = "none"
 circuit_example.disabled = true;
-getrows.value = 3
-getcols.value = 5
+getqubit_indexs.value = 3
+getcircuit_depth.value = 5
 gettheta.onfocus = function () {
     this.value = ""
 };
@@ -111,25 +116,25 @@ gettheta.onblur = function () {
     }
 }
 
-getrows.onfocus = function () {
-    if (this.value == "Rows") {
+getqubit_indexs.onfocus = function () {
+    if (this.value == "qubit_indexs") {
         this.value = ""
     }
 };
-getrows.onblur = function () {
+getqubit_indexs.onblur = function () {
     if (this.value == "") {
-        this.value = "Rows"
+        this.value = "qubit_indexs"
     }
 }
-getcols.onfocus = function () {
-    if (this.value == "Cols") {
+getcircuit_depth.onfocus = function () {
+    if (this.value == "circuit_depth") {
         this.value = ""
     }
 };
 
-getcols.onblur = function () {
+getcircuit_depth.onblur = function () {
     if (this.value == "") {
-        this.value = "Cols"
+        this.value = "circuit_depth"
     }
 }
 //Count the number of element in array
@@ -158,25 +163,26 @@ function stringIze(obj) {
 
 //BUTTON Start/restart_dragarea
 btn.onclick = function () {
-    var rows = getrows.value
-    var cols = getcols.value
-    if (rows != "Rows" && cols != "Cols") {
+    var qubit_indexs = getqubit_indexs.value
+    var circuit_depth = getcircuit_depth.value
+    if (qubit_indexs != "qubit_indexs" && circuit_depth != "circuit_depth") {
         restart_dragarea()
-        var addrow = document.querySelector("#addrow")
-        var addcol = document.querySelector("#addcol")
-        var deleterow = document.querySelector("#deleterow")
-        var deletecol = document.querySelector("#deletecol")
+        var addqubit_index = document.querySelector("#addqubit_index")
+        var addcircuit_depth = document.querySelector("#addcircuit_depth")
+        var deletequbit_index = document.querySelector("#deletequbit_index")
+        var deletecircuit_depth = document.querySelector("#deletecircuit_depth")
         document.querySelector("#qvizarea").style.display = "block"
-        addrow.disabled = false
-        addcol.disabled = false
-        deleterow.disabled = false
-        deletecol.disabled = false
-        getcols.disabled = false
-        getrows.disabled = false
+        addqubit_index.disabled = false
+        addcircuit_depth.disabled = false
+        deletequbit_index.disabled = false
+        deletecircuit_depth.disabled = false
+        save_images.style.display = "inline-block"
+        getcircuit_depth.disabled = false
+        getqubit_indexs.disabled = false
         result_display.style.display = "block"
         circuit_example.disabled = false;
         setTimeout(() => {
-            Initialize(rows, cols)
+            Initialize(qubit_indexs, circuit_depth)
         }, 0);
     }
 }
@@ -185,24 +191,24 @@ btn.onclick = function () {
 //==========================================================
 function restart_dragarea() {
     setTimeout(() => {
-        var rows = document.querySelector("#Dragable_Area")
-        rows.innerHTML = '<div class="cols"></div>'
+        var qubit_indexs = document.querySelector("#Dragable_Area")
+        qubit_indexs.innerHTML = '<div class="circuit_depth"></div>'
         Init_algorithm()
     }, 0);
 }
 
-function Initialize(rows, cols) {
+function Initialize(qubit_indexs, circuit_depth) {
     qvizdraw = { qubits: [], operations: [] }
     var arr1 = [];
     arr1.push()
-    for (var i = 0; i < cols; i++) {
-        arr1.push(`<div class="droppable row" data-cols = "${i}"></div>`);
+    for (var i = 0; i < circuit_depth; i++) {
+        arr1.push(`<div class="droppable qubit_index" data-circuit_depth = "${i}"></div>`);
     }
-    document.querySelector('.cols').innerHTML = arr1.join('');
+    document.querySelector('.circuit_depth').innerHTML = arr1.join('');
     var arr2 = [];
-    var temp = document.querySelector(".cols").innerHTML
-    for (var i = 0; i < rows; i++) {
-        arr2.push(`<div class="cols" data-rows = "${i}">` + `<img data-index="0" data-qindex="${i}" class="qubit" src="./images/ket0.svg" alt="\ket{0}" height="50px" width="50px" />` + temp.toString() + '</div>');
+    var temp = document.querySelector(".circuit_depth").innerHTML
+    for (var i = 0; i < qubit_indexs; i++) {
+        arr2.push(`<div class="circuit_depth" data-qubit_indexs = "${i}">` + `<img data-index="0" data-qindex="${i}" class="qubit" src="./images/ket0.svg" alt="\ket{0}" height="50px" width="50px" />` + temp.toString() + '</div>');
         qvizdraw["qubits"].push({ id: i, numChildren: 1 })
     }
     document.querySelector('#Dragable_Area').innerHTML = arr2.join('');
@@ -222,16 +228,16 @@ function Initialize(rows, cols) {
     }, 0);
 }
 
-function addcol() {
-    var colslen = document.querySelector(".cols").childElementCount
-    if (colslen > 0) {
-        document.querySelector("#deletecol").disabled = false;
+function addcircuit_depth() {
+    var circuit_depthlen = document.querySelector(".circuit_depth").childElementCount
+    if (circuit_depthlen > 0) {
+        document.querySelector("#deletecircuit_depth").disabled = false;
     }
-    var temp = document.getElementsByClassName("cols");
+    var temp = document.getElementsByClassName("circuit_depth");
     for (var i = 0; i < temp.length; i++) {
         var o = document.createElement("div");
-        o.className = "droppable row";
-        o.setAttribute('data-cols', `${colslen - 1}`)
+        o.className = "droppable qubit_index";
+        o.setAttribute('data-circuit_depth', `${circuit_depthlen - 1}`)
         temp[i].appendChild(o)
     }
     setTimeout(() => {
@@ -239,7 +245,7 @@ function addcol() {
         Init_algorithm()
         //CHANGE THE GLOBAL VARS
         droppablesvar = document.querySelectorAll('.droppable')
-        //Add listener to the cols added
+        //Add listener to the circuit_depth added
         droplisten(droppablesvar)
         //Update gate information
         totoaldrawqc(totoalqcinfor())
@@ -249,24 +255,24 @@ function addcol() {
 
 }
 
-function addrow() {
-    var len = document.getElementsByClassName("cols").length
+function addqubit_index() {
+    var len = document.getElementsByClassName("circuit_depth").length
     if (len > 0) {
-        document.querySelector("#deleterow").disabled = false;
+        document.querySelector("#deletequbit_index").disabled = false;
     }
-    var cols = document.querySelector(".cols").childElementCount
+    var circuit_depth = document.querySelector(".circuit_depth").childElementCount
     var arr1 = [];
     var qubitnum = document.querySelectorAll(".qubit")
     arr1.push(`<img data-index="0" data-qindex="${qubitnum.length}" class="qubit" src="./images/ket0.svg" alt="\ket{0}" height="50px" width="50px" />`)
-    for (var i = 0; i < cols - 1; i++) {
-        arr1.push(`<div class="droppable row" data-cols = "${i}"></div>`);
+    for (var i = 0; i < circuit_depth - 1; i++) {
+        arr1.push(`<div class="droppable qubit_index" data-circuit_depth = "${i}"></div>`);
     }
     let temp = arr1.join('');
     var o = document.createElement("div");
-    o.className = "cols"
+    o.className = "circuit_depth"
     for (var i = 0; i < parseElement(temp).length; i++) {
-        var rowindex = document.getElementsByClassName("cols")
-        o.setAttribute("data-rows", `${rowindex.length}`)
+        var qubit_indecircuit_depth_index = document.getElementsByClassName("circuit_depth")
+        o.setAttribute("data-qubit_indexs", `${qubit_indecircuit_depth_index.length}`)
         o.append(parseElement(temp)[i]);
     }
     document.querySelector("#Dragable_Area").append(o)
@@ -320,12 +326,12 @@ function delete_single_ctrl_gate() {
     }
 }
 
-function deleterow() {
-    var len = document.getElementsByClassName("cols").length
+function deletequbit_index() {
+    var len = document.getElementsByClassName("circuit_depth").length
     if (len <= 2) {
-        document.querySelector("#deleterow").disabled = true;
+        document.querySelector("#deletequbit_index").disabled = true;
     }
-    var temp = document.querySelectorAll(".cols");
+    var temp = document.querySelectorAll(".circuit_depth");
     temp[len - 1].remove()
     var qubits = qvizdraw["qubits"]
     qubits.pop()
@@ -340,14 +346,14 @@ function deleterow() {
     }, 0);
 }
 
-function deletecol() {
-    var colslen = document.querySelector(".cols").childElementCount
-    if (colslen <= 3) {
-        document.querySelector("#deletecol").disabled = true;
+function deletecircuit_depth() {
+    var circuit_depthlen = document.querySelector(".circuit_depth").childElementCount
+    if (circuit_depthlen <= 3) {
+        document.querySelector("#deletecircuit_depth").disabled = true;
     }
-    var temps = document.getElementsByClassName("cols")
+    var temps = document.getElementsByClassName("circuit_depth")
     for (var i = 0; i < temps.length; i++) {
-        var temp = temps[i].querySelectorAll(".row")
+        var temp = temps[i].querySelectorAll(".qubit_index")
         var len = temp.length
         temp[len - 1].remove()
     }
@@ -368,9 +374,9 @@ function qubitreverse(qubits) {
 
 
 function qreverse() {
-    var row = this.parentNode.getAttribute("data-rows")
+    var qubit_index = this.parentNode.getAttribute("data-qubit_indexs")
     var temp = document.querySelectorAll("#qvizdraw> svg >text")
-    var qubit = temp[row]
+    var qubit = temp[qubit_index]
     if (this.getAttribute("data-index") == 0) {
         this.setAttribute("src", "./images/ket1.svg")
         this.setAttribute("data-index", 1)
@@ -438,7 +444,7 @@ function dragEnd() {
     this.className = 'draggable';
     var nos = document.querySelectorAll(".noplacement")
     for (var no of nos) {
-        no.className = "droppable row"
+        no.className = "droppable qubit_index"
         AddL(no)
     }
     setTimeout(() => {
@@ -461,7 +467,7 @@ function dragOver(e) {
 
 function dragEnter(e) {
     e.preventDefault();
-    if (this.className != "ctrlline row" || this.className != "rubbish") {
+    if (this.className != "ctrlline qubit_index" || this.className != "rubbish") {
         this.className += ' drag-over';
     }
 
@@ -469,16 +475,16 @@ function dragEnter(e) {
 
 function dragLeave(e) {
     e.preventDefault();
-    if ((this.className == "ctrlline row") || (this.className.includes('rubbish'))) {
+    if ((this.className == "ctrlline qubit_index") || (this.className.includes('rubbish'))) {
         this.className = 'rubbish';
     }
     else {
-        this.className = 'droppable row';
+        this.className = 'droppable qubit_index';
     }
 
 }
 function compile() {
-    var len = document.getElementsByClassName("cols").length
+    var len = document.getElementsByClassName("circuit_depth").length
     if (len > 12) {
         var draw = document.getElementById("histogram")
         draw.innerHTML = ""
@@ -526,7 +532,7 @@ w_v_r.addEventListener("mouseup", function () {
 })
 
 function UpdateData() {
-    var len = document.getElementsByClassName("cols").length
+    var len = document.getElementsByClassName("circuit_depth").length
     if (len > qubit_number) {
         return ""
     }
@@ -564,7 +570,7 @@ function CheckContrlGate(cgs) {
 
 function dragDrop(e) {
     e.preventDefault()
-    this.className = 'droppable row';
+    this.className = 'droppable qubit_index';
     var dragitem = document.querySelector(".dragging")
     var gateClass = dragitem.getAttribute("id")
     var whether_cgate = dragitem.getAttribute("data-control")
@@ -634,9 +640,9 @@ function drawQC() {
         qviz.draw(qvizdraw, sampleDiv, qviz.STYLES['Default']);
     }
     var qubits_ls = init_qubits()
-    var rows = qubits_ls.length
+    var qubit_indexs = qubits_ls.length
     var temp = document.querySelectorAll("#qvizdraw> svg >text")
-    for (var i = 0; i < rows; i++) {
+    for (var i = 0; i < qubit_indexs; i++) {
         if (qubits_ls[i] == "0") { temp[i].innerHTML = "|0⟩" }
         else { temp[i].innerHTML = "|1⟩" }
     }
@@ -666,12 +672,12 @@ function Get_Item_Information(item) {
         gate = gate.slice(4)
     }
     var pcol = item.parentNode;
-    var prow = pcol.parentNode;
-    var x = pcol.getAttribute("data-cols");
-    var y = prow.getAttribute("data-rows");
+    var pqubit_index = pcol.parentNode;
+    var x = pcol.getAttribute("data-circuit_depth");
+    var y = pqubit_index.getAttribute("data-qubit_indexs");
     var control = item.getAttribute("data-control");
     var order = item.getAttribute("data-order");
-    var arr = { xindex: x, yindex: y, gateclass: gate, iscontrol: control, ctrlgate_order: order };
+    var arr = { circuit_depth_index: x, qubit_number_index: y, gateclass: gate, iscontrol: control, ctrlgate_order: order };
     return arr
 }
 
@@ -680,7 +686,7 @@ function GetCoordinates(draggables) {
     var gateinformation = []
     for (var drag_item of draggables) {
         var pcol = drag_item.parentNode;
-        var x = pcol.getAttribute("data-cols");
+        var x = pcol.getAttribute("data-circuit_depth");
         var arr = Get_Item_Information(drag_item)
         if (x != null) {
             gateinformation.push(arr)
@@ -696,25 +702,25 @@ function totoaldrawqc(qcinfor) {
     var ms = qcinfor["measure"]
     var inforcontainer = []
     qvizdraw["operations"] = []
-    var cols = document.querySelector(".cols").childElementCount
-    for (var i = 0; i < cols - 1; i++) {
+    var circuit_depth = document.querySelector(".circuit_depth").childElementCount
+    for (var i = 0; i < circuit_depth - 1; i++) {
         var container = {
             index: 0,
             gates: [],
         }
         var everycol = []
         for (var j = 0; j < sgs.length; j++) {
-            if (sgs[j]['gateinfor']["xindex"] == i.toString()) {
+            if (sgs[j]['gateinfor']["circuit_depth_index"] == i.toString()) {
                 everycol.push(sgs[j])
             }
         }
         for (var j = 0; j < ms.length; j++) {
-            if (ms[j]['gateinfor']["xindex"] == i.toString()) {
+            if (ms[j]['gateinfor']["circuit_depth_index"] == i.toString()) {
                 everycol.push(ms[j])
             }
         }
         for (var j = 0; j < cgs.length; j++) {
-            if (cgs[j]['gateinfor']["ctrl"]["xindex"] == i.toString()) {
+            if (cgs[j]['gateinfor']["ctrl"]["circuit_depth_index"] == i.toString()) {
                 everycol.push(cgs[j])
             }
         }
@@ -733,7 +739,7 @@ function totoaldrawqc(qcinfor) {
                     targets: [],
                 }
                 temp["gate"] = gateinfor["gateclass"]
-                temp["targets"] = [{ qId: gateinfor["yindex"] }]
+                temp["targets"] = [{ qId: gateinfor["qubit_number_index"] }]
                 qvizdraw["operations"].push(temp)
             }
             if (gateclass == "cg") {
@@ -744,8 +750,8 @@ function totoaldrawqc(qcinfor) {
                     targets: [],
                 }
                 temp["gate"] = gateinfor['ctrlgate']["gateclass"]
-                temp["targets"] = [{ qId: gateinfor['ctrlgate']["yindex"] }]
-                temp["controls"] = [{ qId: gateinfor['ctrl']["yindex"] }]
+                temp["targets"] = [{ qId: gateinfor['ctrlgate']["qubit_number_index"] }]
+                temp["controls"] = [{ qId: gateinfor['ctrl']["qubit_number_index"] }]
                 qvizdraw["operations"].push(temp)
             }
             if (gateclass == "measure") {
@@ -755,7 +761,7 @@ function totoaldrawqc(qcinfor) {
                     controls: [],
                     targets: [],
                 }
-                c = gateinfor["yindex"]
+                c = gateinfor["qubit_number_index"]
                 temp["gate"] = gateinfor["gateclass"]
                 temp["targets"] = [{ type: 1, qId: parseInt(c), cId: 0 }]
                 temp["controls"] = [{ qId: parseInt(c) }]
@@ -806,8 +812,8 @@ function totoalqcinfor() {
             else { ctrlgatesets.push(sgate) }
             for (var i = 0; i < ctrlsets.length; i++) {
                 for (var j = 0; j < ctrlgatesets.length; j++) {
-                    var ctrlindex = ctrlsets[i]["xindex"]
-                    var ctrlgateindex = ctrlgatesets[j]["xindex"]
+                    var ctrlindex = ctrlsets[i]["circuit_depth_index"]
+                    var ctrlgateindex = ctrlgatesets[j]["circuit_depth_index"]
                     if (ctrlindex == ctrlgateindex && (ctrlsets[i]["ctrlgate_order"] == ctrlgatesets[j]["ctrlgate_order"])) {
                         var temp = {
                             ctrl: ctrlsets[i],
@@ -836,21 +842,21 @@ function ctrlplace(ctrlgatescontainer) {
     remove_ctrlline()
     for (var c of ctrlgatescontainer) {
         var cg = c["gateinfor"]
-        add_ctrlline(cg["ctrl"]["xindex"], cg["ctrl"]["yindex"], cg["ctrlgate"]["yindex"], cg["ctrlgate"]["ctrlgate_order"], cg["ctrl"]["ctrlgate_order"])
+        add_ctrlline(cg["ctrl"]["circuit_depth_index"], cg["ctrl"]["qubit_number_index"], cg["ctrlgate"]["qubit_number_index"], cg["ctrlgate"]["ctrlgate_order"], cg["ctrl"]["ctrlgate_order"])
     }
 }
 
 function add_ctrlline(index_x, ctrl_y, ctrlgate_y, ctrl_order, ctrl_gate_order) {
     var droppables = document.querySelectorAll(".droppable")
     for (var drop of droppables) {
-        var x = drop.getAttribute("data-cols")
+        var x = drop.getAttribute("data-circuit_depth")
         var temp = drop.parentNode
-        var y = parseInt(temp.getAttribute("data-rows"))
+        var y = parseInt(temp.getAttribute("data-qubit_indexs"))
         var check1 = (y > parseInt(ctrl_y) && y < parseInt(ctrlgate_y))
         var check2 = (y < parseInt(ctrl_y) && y > parseInt(ctrlgate_y))
         var checkout = (check1 || check2)
         if ((x == index_x && checkout) && (ctrl_order == ctrl_gate_order)) {
-            drop.className = "ctrlline row"
+            drop.className = "ctrlline qubit_index"
             drop.removeEventListener('dragover', dragOver);
             drop.removeEventListener('dragleave', dragLeave);
             drop.removeEventListener('dragenter', dragEnter);
@@ -862,7 +868,7 @@ function add_ctrlline(index_x, ctrl_y, ctrlgate_y, ctrl_order, ctrl_gate_order) 
 function remove_ctrlline() {
     var ctrlline_placements = document.querySelectorAll(".ctrlline")
     for (var ctrlline of ctrlline_placements) {
-        ctrlline.className = "droppable row"
+        ctrlline.className = "droppable qubit_index"
         AddL(ctrlline)
     }
 }
@@ -870,7 +876,7 @@ function remove_ctrlline() {
 function activate_ctrlline(col) {
     var lines = document.querySelectorAll(".ctrlline")
     for (line of lines) {
-        if (line.getAttribute("data-cols") == col) {
+        if (line.getAttribute("data-circuit_depth") == col) {
             AddL(line)
         }
     }
@@ -878,7 +884,7 @@ function activate_ctrlline(col) {
 function ProhibitedCol(col) {
     var droppables = document.querySelectorAll(".droppable")
     for (var drop of droppables) {
-        var x = drop.getAttribute("data-cols")
+        var x = drop.getAttribute("data-circuit_depth")
         var element = drop.childElementCount
         if (x == col && (element == 0)) {
             drop.className = "noplacement"
@@ -889,25 +895,25 @@ function ProhibitedCol(col) {
         }
     }
 }
-//Check what you are dragging whether has the matched ctrl gate in the same cols
-function CheckColCG(item) {
+//Check what you are dragging whether has the matched ctrl gate in the same circuit_depth
+function Checkcircuit_depthCG(item) {
     var whether_cgate = item.getAttribute("data-control")
     var whether_measure = item.getAttribute("id")
     var result = false
     if (whether_cgate == "true" && whether_measure != "measure") {
         var item_parentNode = item.parentNode;
         var p_parentNode = item_parentNode.parentNode;
-        var check_row = p_parentNode.getAttribute("data-rows")
-        var check_col = item_parentNode.getAttribute("data-cols")
+        var check_qubit_index = p_parentNode.getAttribute("data-qubit_indexs")
+        var check_col = item_parentNode.getAttribute("data-circuit_depth")
         var check_order = item.getAttribute("data-order")
         var draggables = document.querySelectorAll(".draggable")
         for (drag_item of draggables) {
             var order = drag_item.getAttribute("data-order")
             var col_temp = drag_item.parentNode
-            var row_temp = col_temp.parentNode
-            var col = col_temp.getAttribute("data-cols")
-            var row = row_temp.getAttribute("data-rows")
-            if ((check_order == order && check_col == col) && (check_row != row)) {
+            var qubit_index_temp = col_temp.parentNode
+            var col = col_temp.getAttribute("data-circuit_depth")
+            var qubit_index = qubit_index_temp.getAttribute("data-qubit_indexs")
+            if ((check_order == order && check_col == col) && (check_qubit_index != qubit_index)) {
                 result = true
                 break
             }
@@ -921,7 +927,7 @@ function CheckColCG(item) {
 function dragStart() {
     this.className += ' dragging';
     var col_temp = this.parentNode;
-    var this_col = col_temp.getAttribute("data-cols")
+    var this_col = col_temp.getAttribute("data-circuit_depth")
     var all_draggables = document.querySelectorAll(".draggable")
     var tmp = []
     if (this.getAttribute("data-control") == "false" || this.getAttribute("id") == "measure") {
@@ -940,9 +946,9 @@ function dragStart() {
         }
         for (var drag_item of all_draggables) {
             var drag_item_parentNode = drag_item.parentNode;
-            var everycol = drag_item_parentNode.getAttribute("data-cols")
+            var everycol = drag_item_parentNode.getAttribute("data-circuit_depth")
             var everyorder = drag_item.getAttribute("data-order")
-            if (CountArray(tmp, everyorder) == 2 && CheckColCG(drag_item)) {
+            if (CountArray(tmp, everyorder) == 2 && Checkcircuit_depthCG(drag_item)) {
                 if (this_col != everycol) {
                     ProhibitedCol(everycol)
                 }

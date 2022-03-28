@@ -20,9 +20,6 @@
             <a href="#" class="Navigation_Element" id="exportJSON">Save</a>
         </div>
         <div class="Navigation_Bar">
-            <a href="#" class="Navigation_Element" id="exportJSON_applylist">ApplyList</a>
-        </div>
-        <div class="Navigation_Bar">
             <a href="#" class="Navigation_Element" onclick=compile() id="Compile">Compile</a>
         </div>
         <div class="Navigation_Bar">
@@ -32,8 +29,8 @@
     </div>
     </div>
     <div class="init">
-        <input type="text" min="0" class="input" value="Rows" id="rowsinput" />
-        <input type="text" min="0" class="input" value="Cols" id="colsinput" />
+        <input type="text" min="0" class="input" value="Qubit_Index" id="qubit_indexsinput" />
+        <input type="text" min="0" class="input" value="Circuit_Depth" id="circuit_depthinput" />
         <button id="btn">Start/Clear</button>
         <select name="example" onchange="Execution_algorithm(this)" id="example">
             <option>algorithm</option>
@@ -44,10 +41,10 @@
         </select>
     </div>
     <div class="init">
-        <button class="add" id="addrow" onclick="addrow()">AddRow</button>
-        <button class="add" id="addcol" onclick="addcol()">AddCol</button>
-        <button class="delete" id="deleterow" onclick="deleterow()">DelRow</button>
-        <button class="delete" id="deletecol" onclick="deletecol()">DelCol</button>
+        <button class="add" id="addqubit_index" onclick="addqubit_index()">Add Qubit</button>
+        <button class="add" id="addcircuit_depth" onclick="addcircuit_depth()">Add Depth</button>
+        <button class="delete" id="deletequbit_index" onclick="deletequbit_index()">Del Qubit</button>
+        <button class="delete" id="deletecircuit_depth" onclick="deletecircuit_depth()">Del Depth</button>
     </div>
     <div class="Gate_Sets">
         <div class="Single_Gates">
@@ -143,12 +140,13 @@
             </div>
         </div>
     </div>
-    <div>
-        <div class="h2">Input</div>
+    <div >
+        <div class="h2" style="display: inline-block;">Input</div>
+        <button id="save_img_button" style="font-size: 12px;border-radius: 2px;cursor: pointer;margin-left: 256px;" onclick="save_img()">Save Image</button>
     </div>
     <div id="New_Area">
         <div id="Dragable_Area">
-            <div class="cols">
+            <div class="circuit_depth">
             </div>
         </div>
     </div>
