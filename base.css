@@ -150,7 +150,9 @@ p {
 
 }
 
-
+.drag_section{
+    background-color: #000;
+}
 
 .ctrlline {
     background-image: url('./images/ctrlline.svg');

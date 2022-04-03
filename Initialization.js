@@ -3,7 +3,7 @@
 //Author Dormancy
 //------
 function GetApplyList() {
-    var len = document.querySelector(".cols").childElementCount
+    var len = document.querySelector(".circuit_depth").childElementCount
     var applylist = []
     for (var i = 0; i < len - 1; i++) {
         applylist.push([])
@@ -12,15 +12,15 @@ function GetApplyList() {
     var cgs = totoalqcinfor()["cg"]
     var ms = totoalqcinfor()["measure"]
     for (var sgate of sgs) {
-        var tmp = sgate["gateinfor"]["xindex"]
+        var tmp = sgate["gateinfor"]["circuit_depth_index"]
         applylist[tmp].push(sgate)
     }
     for (var cgate of cgs) {
-        var tmp = cgate["gateinfor"]["ctrl"]["xindex"]
+        var tmp = cgate["gateinfor"]["ctrl"]["circuit_depth_index"]
         applylist[tmp].push(cgate)
     }
     for(var m of ms) {
-        var tmp = m["gateinfor"]["xindex"]
+        var tmp = m["gateinfor"]["circuit_depth_index"]
         applylist[tmp].push(m)
     }
     return applylist
@@ -41,13 +41,13 @@ function DensityMatrix(ret) {
     var M = []
     var qubit = []
     for (var i = 0; i < len; i++) {
-        var rows = []
+        var qubit_indexs = []
         for (var j = 0; j < len; j++) {
-            rows[j] = NumtoA((math.multiply(ret[i], ret[j]))).toFixed(Decimal_p)
+            qubit_indexs[j] = NumtoA((math.multiply(ret[i], ret[j]))).toFixed(Decimal_p)
         }
 
         qubit.push(i2b(i, n))
-        M[i] = rows
+        M[i] = qubit_indexs
     }
     object["labels"] = qubit
     object["values"] = M
@@ -99,21 +99,21 @@ function applygate(vec, applylist) {
             if(gate["gateclass"] == "measure")
             {
                 var gateinformation = gate["gateinfor"]
-                var index = gateinformation["yindex"]
+                var index = gateinformation["qubit_number_index"]
                 var measure_project = gateinformation["iscontrol"]
                 var gateclass = gateinformation["gateclass"]+measure_project
                 vec_state = sgo(vec_state, index, gateclass)            
             }
             else if (gate["gateclass"] == "sg") {
                 var gateinformation = gate["gateinfor"]
-                var index = gateinformation["yindex"]
+                var index = gateinformation["qubit_number_index"]
                 var gateclass = gateinformation["gateclass"]
                 vec_state = sgo(vec_state, index, gateclass)
             }
             else {
                 var gateinformation = gate["gateinfor"]
-                var ctrl = gateinformation["ctrl"]["yindex"]
-                var targ = gateinformation["ctrlgate"]["yindex"]
+                var ctrl = gateinformation["ctrl"]["qubit_number_index"]
+                var targ = gateinformation["ctrlgate"]["qubit_number_index"]
                 var gateclass = gateinformation["ctrlgate"]["gateclass"]
                 vec_state = cgo(vec_state, ctrl, targ, gateclass)
             }

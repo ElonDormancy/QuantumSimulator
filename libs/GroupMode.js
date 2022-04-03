@@ -7,7 +7,7 @@ document.onmousedown = function (event) {
         select_area.style.position = 'absolute';
         select_area.style.zIndex = 1000;
         select_area.className = "drag_section"
-        select_area.style.backgroundColor = "black"
+        select_area.style.backgroundcircuit_depthor = "black"
         select_area.style.opacity = "0.1"
         select_area.style.left = shiftX + 'px';
         select_area.style.top = shiftY + 'px';
@@ -65,21 +65,21 @@ document.onmousedown = function (event) {
         }
     }
 }
-//Return the item the same cols of ctrl gate
-function ColCG(item) {
+//Return the item the same circuit_depth of ctrl gate
+function circuit_depthCG(item) {
     var item_parentNode = item.parentNode;
     var p_parentNode = item_parentNode.parentNode;
-    var check_row = p_parentNode.getAttribute("data-rows")
-    var check_col = item_parentNode.getAttribute("data-cols")
+    var check_qubit_index = p_parentNode.getAttribute("data-qubit_indexs")
+    var check_circuit_depth = item_parentNode.getAttribute("data-circuit_depth")
     var check_order = item.getAttribute("data-order")
     var draggables = document.querySelectorAll(".draggable")
     for (drag_item of draggables) {
         var order = drag_item.getAttribute("data-order")
-        var col_temp = drag_item.parentNode
-        var row_temp = col_temp.parentNode
-        var col = col_temp.getAttribute("data-cols")
-        var row = row_temp.getAttribute("data-rows")
-        if ((check_order == order && check_col == col) && (check_row != row)) {
+        var circuit_depth_temp = drag_item.parentNode
+        var qubit_index_temp = circuit_depth_temp.parentNode
+        var circuit_depth = circuit_depth_temp.getAttribute("data-circuit_depth")
+        var qubit_index = qubit_index_temp.getAttribute("data-qubit_indexs")
+        if ((check_order == order && check_circuit_depth == circuit_depth) && (check_qubit_index != qubit_index)) {
             return drag_item
         }
     }
@@ -115,8 +115,8 @@ function Selected_Gate(shiftX, shiftY, width, height) {
     setTimeout(() => {
         var draggables = area.querySelectorAll(".draggable")
         for (drag_item of draggables) {
-            if (CheckColCG(drag_item) && drag_item.className == "draggable selected") {
-                ColCG(drag_item).className = "draggable selected"
+            if (Checkcircuit_depthCG(drag_item) && drag_item.className == "draggable selected") {
+                circuit_depthCG(drag_item).className = "draggable selected"
             }
         }
     }, 0);
@@ -134,31 +134,31 @@ function Pack_Element(min_x, max_x, min_y, max_y) {
     selects.style.height = height + 'px'
     selects.style.left = min_x + 'px';
     selects.style.top = min_y + 'px';
-    var add_rows = document.createElement("span");
-    var del_rows = document.createElement("span");
-    var add_cols = document.createElement("span");
-    var del_cols = document.createElement("span");
-    add_rows.className = "adjust_package_ar"
-    add_cols.className = "adjust_package_ac"
-    del_rows.className = "adjust_package_dr"
-    del_cols.className = "adjust_package_dc"
-    Add_hover(add_rows)
-    Add_hover(add_cols)
-    Add_hover(del_rows)
-    Add_hover(del_cols)
+    var add_qubit_indexs = document.createElement("span");
+    var del_qubit_indexs = document.createElement("span");
+    var add_circuit_depth = document.createElement("span");
+    var del_circuit_depth = document.createElement("span");
+    add_qubit_indexs.className = "adjust_package_ar"
+    add_circuit_depth.className = "adjust_package_ac"
+    del_qubit_indexs.className = "adjust_package_dr"
+    del_circuit_depth.className = "adjust_package_dc"
+    Add_hover(add_qubit_indexs)
+    Add_hover(add_circuit_depth)
+    Add_hover(del_qubit_indexs)
+    Add_hover(del_circuit_depth)
     var click_close = document.createElement("div");
     click_close.className = "click_close"
     click_close.addEventListener("click", close)
-    add_rows.addEventListener("click", package_ar)
-    add_cols.addEventListener("click", package_ac)
-    del_rows.addEventListener("click", package_dr)
-    del_cols.addEventListener("click", package_dc)
-    del_rows.addEventListener("mouseover", package_dr_L)
-    del_cols.addEventListener("mouseover", package_dc_L)
-    selects.appendChild(add_rows)
-    selects.appendChild(add_cols)
-    selects.appendChild(del_rows)
-    selects.appendChild(del_cols)
+    add_qubit_indexs.addEventListener("click", package_ar)
+    add_circuit_depth.addEventListener("click", package_ac)
+    del_qubit_indexs.addEventListener("click", package_dr)
+    del_circuit_depth.addEventListener("click", package_dc)
+    del_qubit_indexs.addEventListener("mouseover", package_dr_L)
+    del_circuit_depth.addEventListener("mouseover", package_dc_L)
+    selects.appendChild(add_qubit_indexs)
+    selects.appendChild(add_circuit_depth)
+    selects.appendChild(del_qubit_indexs)
+    selects.appendChild(del_circuit_depth)
     selects.appendChild(click_close)
     return selects
 }
@@ -209,14 +209,14 @@ function Gate_Pack() {
         window.document.body.appendChild(Pack_Element(min_x, max_x, min_y, max_y));
     }
 }
-function Add_Move_Row_L(area) {
-    var del_rows = area.querySelector(".adjust_package_dr")
-    Add_hover(del_rows)
+function Add_Move_qubit_index_L(area) {
+    var del_qubit_indexs = area.querySelector(".adjust_package_dr")
+    Add_hover(del_qubit_indexs)
 }
 
-function Add_Move_Col_L(area) {
-    var del_cols = area.querySelector(".adjust_package_dc")
-    Add_hover(del_cols)
+function Add_Move_circuit_depth_L(area) {
+    var del_circuit_depth = area.querySelector(".adjust_package_dc")
+    Add_hover(del_circuit_depth)
 }
 
 function close() {
@@ -252,8 +252,8 @@ function Get_Package_Gates(self, whether_remove) {
         var curr_x = math.round(drag_item.getBoundingClientRect().left + document.documentElement.scrollLeft);
         var curr_y = math.round(drag_item.getBoundingClientRect().top + document.documentElement.scrollTop);
         if ((curr_x >= pack_x) && (curr_y >= pack_y) && (curr_x <= (pack_x + width - 50)) && curr_y <= (pack_y + height - 50)) {
-            var pcol = drag_item.parentNode;
-            var x = pcol.getAttribute("data-cols");
+            var pcircuit_depth = drag_item.parentNode;
+            var x = pcircuit_depth.getAttribute("data-circuit_depth");
             var arr = Get_Item_Information(drag_item)
             if (whether_remove) { drag_item.remove() }
             let objCopy = drag_item.cloneNode()
@@ -274,9 +274,9 @@ function package_dr_L() {
     var pack_gate_infor = Get_Package_Gates(this, false)
     var gate_infor_min = 1
     for (var sg_infor of pack_gate_infor) {
-        var gate_rows = sg_infor["data"]["yindex"]
-        if (gate_rows < gate_infor_min) {
-            gate_infor_min = gate_rows
+        var gate_qubit_indexs = sg_infor["data"]["qubit_number_index"]
+        if (gate_qubit_indexs < gate_infor_min) {
+            gate_infor_min = gate_qubit_indexs
         }
     }
     if (parseInt(gate_infor_min) == 0) {
@@ -289,9 +289,9 @@ function package_dc_L() {
     var pack_gate_infor = Get_Package_Gates(this, false)
     var gate_infor_min = 1
     for (var sg_infor of pack_gate_infor) {
-        var gate_cols = sg_infor["data"]["xindex"]
-        if (gate_cols < gate_infor_min) {
-            gate_infor_min = gate_cols
+        var gate_circuit_depth = sg_infor["data"]["circuit_depth_index"]
+        if (gate_circuit_depth < gate_infor_min) {
+            gate_infor_min = gate_circuit_depth
         }
     }
     if (parseInt(gate_infor_min) == 0) {
@@ -302,15 +302,15 @@ function package_dc_L() {
 
 function Package_Move_Down(cells, pack_gate_infor) {
     for (var cell of cells) {
-        var Areacols = cell.getAttribute("data-cols")
+        var Areacircuit_depth = cell.getAttribute("data-circuit_depth")
         var tmp = cell.parentNode
-        var Arearows = tmp.getAttribute("data-rows")
+        var Areaqubit_indexs = tmp.getAttribute("data-qubit_indexs")
         for (var pack_gate of pack_gate_infor) {
-            var gate_cols = pack_gate["data"]["xindex"]
-            var gate_rows = pack_gate["data"]["yindex"]
+            var gate_circuit_depth = pack_gate["data"]["circuit_depth_index"]
+            var gate_qubit_indexs = pack_gate["data"]["qubit_number_index"]
             var gate_infor = pack_gate["gate_div"]
-            if (gate_cols == Areacols) {
-                if (parseInt(Arearows) == (parseInt(gate_rows) + 1)) {
+            if (gate_circuit_depth == Areacircuit_depth) {
+                if (parseInt(Areaqubit_indexs) == (parseInt(gate_qubit_indexs) + 1)) {
                     cell.innerHTML = gate_infor
                 }
             }
@@ -320,15 +320,15 @@ function Package_Move_Down(cells, pack_gate_infor) {
 
 function Package_Move_Up(cells, pack_gate_infor) {
     for (var cell of cells) {
-        var Areacols = cell.getAttribute("data-cols")
+        var Areacircuit_depth = cell.getAttribute("data-circuit_depth")
         var tmp = cell.parentNode
-        var Arearows = tmp.getAttribute("data-rows")
+        var Areaqubit_indexs = tmp.getAttribute("data-qubit_indexs")
         for (var pack_gate of pack_gate_infor) {
-            var gate_cols = pack_gate["data"]["xindex"]
-            var gate_rows = pack_gate["data"]["yindex"]
+            var gate_circuit_depth = pack_gate["data"]["circuit_depth_index"]
+            var gate_qubit_indexs = pack_gate["data"]["qubit_number_index"]
             var gate_infor = pack_gate["gate_div"]
-            if (gate_cols == Areacols) {
-                if (parseInt(Arearows) == (parseInt(gate_rows) - 1)) {
+            if (gate_circuit_depth == Areacircuit_depth) {
+                if (parseInt(Areaqubit_indexs) == (parseInt(gate_qubit_indexs) - 1)) {
                     cell.innerHTML = gate_infor
                 }
             }
@@ -338,15 +338,15 @@ function Package_Move_Up(cells, pack_gate_infor) {
 
 function Package_Move_Right(cells, pack_gate_infor) {
     for (var cell of cells) {
-        var Areacols = cell.getAttribute("data-cols")
+        var Areacircuit_depth = cell.getAttribute("data-circuit_depth")
         var tmp = cell.parentNode
-        var Arearows = tmp.getAttribute("data-rows")
+        var Areaqubit_indexs = tmp.getAttribute("data-qubit_indexs")
         for (var pack_gate of pack_gate_infor) {
-            var gate_cols = pack_gate["data"]["xindex"]
-            var gate_rows = pack_gate["data"]["yindex"]
+            var gate_circuit_depth = pack_gate["data"]["circuit_depth_index"]
+            var gate_qubit_indexs = pack_gate["data"]["qubit_number_index"]
             var gate_infor = pack_gate["gate_div"]
-            if (gate_rows == Arearows) {
-                if (parseInt(Areacols) == (parseInt(gate_cols) + 1)) {
+            if (gate_qubit_indexs == Areaqubit_indexs) {
+                if (parseInt(Areacircuit_depth) == (parseInt(gate_circuit_depth) + 1)) {
                     cell.innerHTML = gate_infor
                 }
             }
@@ -356,15 +356,15 @@ function Package_Move_Right(cells, pack_gate_infor) {
 
 function Package_Move_Left(cells, pack_gate_infor) {
     for (var cell of cells) {
-        var Areacols = cell.getAttribute("data-cols")
+        var Areacircuit_depth = cell.getAttribute("data-circuit_depth")
         var tmp = cell.parentNode
-        var Arearows = tmp.getAttribute("data-rows")
+        var Areaqubit_indexs = tmp.getAttribute("data-qubit_indexs")
         for (var pack_gate of pack_gate_infor) {
-            var gate_cols = pack_gate["data"]["xindex"]
-            var gate_rows = pack_gate["data"]["yindex"]
+            var gate_circuit_depth = pack_gate["data"]["circuit_depth_index"]
+            var gate_qubit_indexs = pack_gate["data"]["qubit_number_index"]
             var gate_infor = pack_gate["gate_div"]
-            if (gate_rows == Arearows) {
-                if (parseInt(Areacols) == (parseInt(gate_cols) - 1)) {
+            if (gate_qubit_indexs == Areaqubit_indexs) {
+                if (parseInt(Areacircuit_depth) == (parseInt(gate_circuit_depth) - 1)) {
                     cell.innerHTML = gate_infor
                 }
             }
@@ -379,23 +379,23 @@ function package_ar() {
     pack.remove()
     setTimeout(() => {
         var dragarea = document.querySelector("#Dragable_Area")
-        var check_cells = dragarea.querySelectorAll(".cols")
+        var check_cells = dragarea.querySelectorAll(".circuit_depth")
         var Area_max = 0
         var gate_infor_max = 0
         for (var cell of check_cells) {
-            var Arearows = cell.getAttribute("data-rows")
-            if (Arearows > Area_max) {
-                Area_max = Arearows
+            var Areaqubit_indexs = cell.getAttribute("data-qubit_indexs")
+            if (Areaqubit_indexs > Area_max) {
+                Area_max = Areaqubit_indexs
             }
         }
         for (var sg_infor of pack_gate_infor) {
-            var gate_rows = sg_infor["data"]["yindex"]
-            if (gate_rows > gate_infor_max) {
-                gate_infor_max = gate_rows
+            var gate_qubit_indexs = sg_infor["data"]["qubit_number_index"]
+            if (gate_qubit_indexs > gate_infor_max) {
+                gate_infor_max = gate_qubit_indexs
             }
         }
         if (parseInt(Area_max) >= (parseInt(gate_infor_max) + 1)) {
-            var cells = dragarea.querySelectorAll(".row")
+            var cells = dragarea.querySelectorAll(".qubit_index")
             Package_Move_Down(cells, pack_gate_infor)
             totoaldrawqc(totoalqcinfor())
             compile()
@@ -403,9 +403,9 @@ function package_ar() {
             draggableL(draggables)
         }
         else {
-            addrow()
+            addqubit_index()
             setTimeout(() => {
-                var cells = dragarea.querySelectorAll(".row")
+                var cells = dragarea.querySelectorAll(".qubit_index")
                 Package_Move_Down(cells, pack_gate_infor)
                 totoaldrawqc(totoalqcinfor())
                 compile()
@@ -421,19 +421,19 @@ function package_ac() {
     var pack = this.parentNode
     pack.remove()
     var dragarea = document.querySelector("#Dragable_Area")
-    var cells = dragarea.querySelectorAll(".row")
+    var cells = dragarea.querySelectorAll(".qubit_index")
     var Area_max = 0
     var gate_infor_max = 0
     for (var cell of cells) {
-        var Areacols = cell.getAttribute("data-cols")
-        if (Areacols > Area_max) {
-            Area_max = Areacols
+        var Areacircuit_depth = cell.getAttribute("data-circuit_depth")
+        if (Areacircuit_depth > Area_max) {
+            Area_max = Areacircuit_depth
         }
     }
     for (var sg_infor of pack_gate_infor) {
-        var gate_cols = sg_infor["data"]["xindex"]
-        if (gate_cols > gate_infor_max) {
-            gate_infor_max = gate_cols
+        var gate_circuit_depth = sg_infor["data"]["circuit_depth_index"]
+        if (gate_circuit_depth > gate_infor_max) {
+            gate_infor_max = gate_circuit_depth
         }
     }
     setTimeout(() => {
@@ -448,9 +448,9 @@ function package_ac() {
             }, 0);
         }
         else {
-            addcol()
+            addcircuit_depth()
             setTimeout(() => {
-                var cells = dragarea.querySelectorAll(".row")
+                var cells = dragarea.querySelectorAll(".qubit_index")
                 Package_Move_Right(cells, pack_gate_infor)
                 totoaldrawqc(totoalqcinfor())
                 compile()
@@ -464,7 +464,7 @@ function package_ac() {
 function package_dc() {
     var pack_gate_infor = Get_Package_Gates(this, true)
     var dragarea = document.querySelector("#Dragable_Area")
-    var cells = dragarea.querySelectorAll(".row")
+    var cells = dragarea.querySelectorAll(".qubit_index")
     var pack = this.parentNode
     pack.remove()
     setTimeout(() => {
@@ -483,7 +483,7 @@ function package_dc() {
 function package_dr() {
     var pack_gate_infor = Get_Package_Gates(this, true)
     var dragarea = document.querySelector("#Dragable_Area")
-    var cells = dragarea.querySelectorAll(".row")
+    var cells = dragarea.querySelectorAll(".qubit_index")
     var pack = this.parentNode
     pack.remove()
     setTimeout(() => {
