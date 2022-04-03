@@ -12,7 +12,12 @@ document.querySelector('#exportJSON').onclick = function (evt) {
 
 document.querySelector('#exportJSON_applylist').onclick = function (evt) {
     evt.preventDefault();
-    var out = GetApplyList()
+    var qubits_ls = init_qubits()
+    var normalized_infor = GetApplyList()
+    var out = {
+        init_qubits: qubits_ls,
+        gate_information: normalized_infor
+    }
     var blob = new Blob([JSON.stringify(out)]);
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
@@ -30,18 +35,17 @@ function export_qcinfor(qcinfor) {
         init_qubits: qubits_ls,
         single_gate_sets: {},
         control_gate_sets: {},
-        measure_sets:{},
+        measure_sets: {},
     }
     var ctrlgatesets = []
     var singlegatesets = []
     var measuresets = []
-    for (var m of measures)
-    {
+    for (var m of measures) {
         var measure_operator = {
             cols: 0,
             rows: 0,
             gateclass: 0,
-            project:"false"
+            project: "false"
         }
         var information = m["gateinfor"]
         measure_operator["cols"] = information["xindex"]
@@ -103,8 +107,7 @@ function render_init(qcinfor, maxcols, maxrows) {
     var sgs = qcinfor["single_gate_sets"]
     var cgs = qcinfor["control_gate_sets"]
     var ms = qcinfor["measure_sets"]
-    for (var m of ms)
-    {
+    for (var m of ms) {
         var m_cols = m["cols"]
         var m_rows = m["rows"]
         if (parseInt(m_cols) > parseInt(maxcols)) {
@@ -166,13 +169,12 @@ function qcinfor_render(qcinfor, maxrows = 0, maxcols = 0) {
         var tmp = drop.parentNode
         var rows = tmp.getAttribute("data-rows")
         var cols = drop.getAttribute("data-cols")
-        for (var m of ms)
-        {
+        for (var m of ms) {
             var m_cols = m["cols"]
             var m_rows = m["rows"]
             if (m_cols == cols && m_rows == rows) {
                 var project = m["project"]
-                var element = "gate.measure("+project+")"
+                var element = "gate.measure(" + project + ")"
                 drop.innerHTML = eval(element)
             }
         }
